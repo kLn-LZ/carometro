@@ -1,9 +1,6 @@
 package com.fatec.carometro.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +14,14 @@ public class Aluno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    private String email;
-    private String info;
+    private String curso;
+    private String ano;
+    @Lob
+    private byte[] foto;
+    private String linkedIn;
+    private String gitHub;
+    private String lattes;
+    private String historico;
+    private String conquistas;
     private boolean consentePublicacao;
 }

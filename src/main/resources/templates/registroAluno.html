@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Aluno - Carômetro</title>
+    <style>
+        #fotoPreview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            display: none;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<h1>Registro de Aluno - Carômetro</h1>
+<p th:if="${error}" class="error" th:text="${error}"></p> <!-- Exibe a mensagem de erro -->
+<form th:action="@{/registro}" th:object="${aluno}" method="post" enctype="multipart/form-data">
+    <h2>Foto</h2>
+    <label for="foto">Foto (Sozinho ou em Família):</label>
+    <input type="file" id="foto" name="foto" accept="image/*" required onchange="previewImage(event)"><br>
+    <img id="fotoPreview" alt="Pré-visualização da Foto">
+
+    <h2>Dados Pessoais</h2>
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" th:field="*{nome}" required><br>
+
+    <label for="curso">Curso:</label>
+    <input type="text" id="curso" th:field="*{curso}" required><br>
+
+    <label for="ano">Ano:</label>
+    <input type="text" id="ano" th:field="*{ano}" required><br>
+
+    <h2>Links</h2>
+    <label for="linkedIn">LinkedIn:</label>
+    <input type="url" id="linkedIn" th:field="*{linkedIn}"><br>
+
+    <label for="gitHub">GitHub:</label>
+    <input type="url" id="gitHub" th:field="*{gitHub}"><br>
+
+    <label for="lattes">Lattes:</label>
+    <input type="url" id="lattes" th:field="*{lattes}"><br>
+
+    <h2>Histórico</h2>
+    <label for="historico">Histórico (Onde estudou, o que fez lá, e quanto tempo estudou):</label>
+    <textarea id="historico" th:field="*{historico}" required></textarea><br>
+
+    <h2>Conquistas</h2>
+    <label for="conquistas">Conquistas (Apenas na FATEC):</label>
+    <textarea id="conquistas" th:field="*{conquistas}" required></textarea><br>
+
+    <h2>Consentimento</h2>
+    <label for="consentePublicacao">Concordo com a publicação das minhas informações:</label>
+    <input type="checkbox" id="consentePublicacao" th:field="*{consentePublicacao}"><br>
+
+    <button type="submit">Registrar</button>
+</form>
+<p th:if="${param.success}">Registro concluído com sucesso! Seu perfil está aguardando aprovação.</p>
+
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('fotoPreview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>
