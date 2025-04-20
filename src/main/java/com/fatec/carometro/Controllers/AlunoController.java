@@ -52,7 +52,7 @@ public class AlunoController {
             Aluno aluno = alunoDTO.toEntity();
 
             alunoService.registraAluno(aluno);
-            return "redirect:/registroAluno?success";
+            return "registroSucesso";
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
             return "registroAluno";
