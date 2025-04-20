@@ -16,7 +16,6 @@ public class AlunoService {
         if (!aluno.isConsentePublicacao()) throw new RuntimeException("Precisa-se de consentimento para publicação");
 
         Aluno alunoRegistrado = alunoRepository.save(aluno);
-
         return alunoRegistrado;
     }
 }
