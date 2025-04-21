@@ -1,6 +1,7 @@
 package com.fatec.carometro.DTOs;
 
 import com.fatec.carometro.Entities.Aluno;
+import com.fatec.carometro.Entities.StatusValidacao;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +18,9 @@ public record AlunoDTO(
         @NotBlank String historico,
         @NotBlank String conquistas,
         Boolean consentePublicacao,
-        @NotNull MultipartFile foto
+        @NotNull MultipartFile foto,
+        StatusValidacao statusValidacao,
+        String motivoRejeicao
 )  {
     public Aluno toEntity() throws IOException {
         Aluno aluno = new Aluno();
@@ -31,6 +34,8 @@ public record AlunoDTO(
         aluno.setConquistas(this.conquistas());
         aluno.setConsentePublicacao(Boolean.TRUE.equals(this.consentePublicacao()));
         aluno.setFoto(this.foto().getBytes());
+        aluno.setStatusValidacao(this.statusValidacao);
+        aluno.setMotivoRejeicao(this.motivoRejeicao);
         return aluno;
     }
 }

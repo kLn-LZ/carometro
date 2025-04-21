@@ -35,7 +35,7 @@ public class LoginController {
         }
 
         session.setAttribute("usuarioLogado", usuarioOpt.get());
-        if (usuarioOpt.get().getTipo() == TipoUsuario.ADMIN) return "menu-admn";
+        if (usuarioOpt.get().getTipo() == TipoUsuario.ADMIN) return "menu-adm";
         else return "menu-aluno";
     }
 

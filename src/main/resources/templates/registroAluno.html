@@ -2,94 +2,65 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registro de Aluno - Carômetro</title>
+    <title>Cadastro do Aluno - Carômetro</title>
     <style>
-        #fotoPreview {
-            max-width: 200px;
-            max-height: 200px;
-            margin-top: 10px;
-            display: none;
-        }
-        .error {
+        .mensagem-rejeicao {
+            border: 1px solid red;
+            background-color: #ffe6e6;
             color: red;
-            font-weight: bold;
-        }
-        .field-error {
-            color: red;
-            font-size: 0.9em;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-<h1>Registro de Aluno - Carômetro</h1>
-<p th:if="${error}" class="error" th:text="${error}"></p>
+<h1>Cadastro do Aluno</h1>
+
+<!-- MENSAGEM DE REJEIÇÃO -->
+<div th:if="${alunoDTO.statusValidacao == T(com.fatec.carometro.Entities.StatusValidacao).REJEITADO}" class="mensagem-rejeicao">
+    <strong>Seu perfil foi rejeitado.</strong><br>
+    <span th:text="'Motivo: ' + ${alunoDTO.motivoRejeicao}"></span>
+</div>
+
 <form th:action="@{/registroAluno}" th:object="${alunoDTO}" method="post" enctype="multipart/form-data">
-    <h2>Foto</h2>
-    <label for="foto">Foto (Sozinho ou em Família):</label>
-    <input type="file" id="foto" name="foto" accept="image/*" required onchange="previewImage(event)"><br>
-    <img id="fotoPreview" alt="Pré-visualização da Foto">
+    <input type="hidden" th:field="*{id}" />
 
-    <h2>Dados Pessoais</h2>
-    <label for="nome">Nome:</label>
-    <input type="text" id="nome" th:field="*{nome}" required>
-    <span class="field-error" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span><br>
+    <label>Nome:</label>
+    <input type="text" th:field="*{nome}" required><br>
 
-    <label for="curso">Curso:</label>
-    <input type="text" id="curso" th:field="*{curso}" required>
-    <span class="field-error" th:if="${#fields.hasErrors('curso')}" th:errors="*{curso}"></span><br>
+    <label>Curso:</label>
+    <input type="text" th:field="*{curso}" required><br>
 
-    <label for="ano">Ano:</label>
-    <input type="text" id="ano" th:field="*{ano}" required>
-    <span class="field-error" th:if="${#fields.hasErrors('ano')}" th:errors="*{ano}"></span><br>
+    <label>Ano:</label>
+    <input type="number" th:field="*{ano}" required><br>
 
-    <h2>Links</h2>
-    <label for="linkedIn">LinkedIn:</label>
-    <input type="url" id="linkedIn" th:field="*{linkedIn}">
-    <span class="field-error" th:if="${#fields.hasErrors('linkedIn')}" th:errors="*{linkedIn}"></span><br>
+    <label>LinkedIn:</label>
+    <input type="url" th:field="*{linkedIn}"><br>
 
-    <label for="gitHub">GitHub:</label>
-    <input type="url" id="gitHub" th:field="*{gitHub}">
-    <span class="field-error" th:if="${#fields.hasErrors('gitHub')}" th:errors="*{gitHub}"></span><br>
+    <label>GitHub:</label>
+    <input type="url" th:field="*{gitHub}"><br>
 
-    <label for="lattes">Lattes:</label>
-    <input type="url" id="lattes" th:field="*{lattes}">
-    <span class="field-error" th:if="${#fields.hasErrors('lattes')}" th:errors="*{lattes}"></span><br>
+    <label>Lattes:</label>
+    <input type="url" th:field="*{lattes}"><br>
 
-    <h2>Histórico</h2>
-    <label for="historico">Histórico (Onde estudou, o que fez lá, e quanto tempo estudou):</label>
-    <textarea id="historico" th:field="*{historico}" required></textarea>
-    <span class="field-error" th:if="${#fields.hasErrors('historico')}" th:errors="*{historico}"></span><br>
+    <label>Histórico:</label><br>
+    <textarea th:field="*{historico}" rows="4" cols="50"></textarea><br>
 
-    <h2>Conquistas</h2>
-    <label for="conquistas">Conquistas (Apenas na FATEC):</label>
-    <textarea id="conquistas" th:field="*{conquistas}" required></textarea>
-    <span class="field-error" th:if="${#fields.hasErrors('conquistas')}" th:errors="*{conquistas}"></span><br>
+    <label>Conquistas:</label><br>
+    <textarea th:field="*{conquistas}" rows="4" cols="50"></textarea><br>
 
-    <h2>Consentimento</h2>
-    <label for="consentePublicacao">Concordo com a publicação das minhas informações:</label>
-    <input type="checkbox" id="consentePublicacao" th:field="*{consentePublicacao}">
-    <span class="field-error" th:if="${#fields.hasErrors('consentePublicacao')}" th:errors="*{consentePublicacao}"></span><br>
+    <label>Foto:</label>
+    <input type="file" name="fotoFile" accept="image/*"><br><br>
 
-    <button type="submit">Registrar</button>
+    <label>
+        <input type="checkbox" th:field="*{consentePublicacao}" />
+        Concordo com a publicação das informações no carômetro
+    </label><br><br>
+
+    <button type="submit">Salvar Cadastro</button>
 </form>
-<p th:if="${param.success}">Registro concluído com sucesso! Seu perfil está aguardando aprovação.</p>
 
-<script>
-    function previewImage(event) {
-        const input = event.target;
-        const preview = document.getElementById('fotoPreview');
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            };
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            preview.src = '';
-            preview.style.display = 'none';
-        }
-    }
-</script>
+<a th:href="@{/}">Voltar</a>
 </body>
 </html>

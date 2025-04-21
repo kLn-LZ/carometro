@@ -35,6 +35,12 @@ public class Aluno {
 
     @NotBlank(message = "As conquistas são obrigatórias")
     private String conquistas;
+
     private boolean consentePublicacao;
-    private boolean validado;
+
+    @Enumerated(EnumType.STRING)
+    private StatusValidacao statusValidacao;
+
+    @Column(length = 1000)
+    private String motivoRejeicao;
 }

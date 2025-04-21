@@ -1,6 +1,7 @@
 package com.fatec.carometro.Services;
 
 import com.fatec.carometro.Entities.Aluno;
+import com.fatec.carometro.Entities.StatusValidacao;
 import com.fatec.carometro.Repositories.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,8 @@ public class AlunoService {
     }
 
     public List<Aluno> buscarAlunosPendentes() {
-        return alunoRepository.findByValidadoFalse();
-
+        return alunoRepository.findByStatusValidacao(StatusValidacao.PENDENTE);
     }
-
-
     public Aluno registraAluno(Aluno aluno) {
         if (!aluno.isConsentePublicacao()) throw new RuntimeException("Precisa-se de consentimento para publicação");
 

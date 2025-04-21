@@ -14,8 +14,8 @@
 <body>
 <h1>Validação de Aluno - Carômetro</h1>
 
-<form th:action="@{/validar-aluno}" th:object="${aluno}" method="post">
-    <input type="hidden" th:field="*{id}" />
+<form th:action="@{/validar-aluno}" method="post">
+    <input type="hidden" th:name="id" th:value="${aluno.id}" />
 
     <h2>Foto</h2>
     <div>
@@ -26,43 +26,69 @@
 
     <h2>Dados Pessoais</h2>
     <label>Nome:</label>
-    <input type="text" th:field="*{nome}" disabled><br>
+    <input type="text" th:value="${aluno.nome}" disabled><br>
 
     <label>Curso:</label>
-    <input type="text" th:field="*{curso}" disabled><br>
+    <input type="text" th:value="${aluno.curso}" disabled><br>
 
     <label>Ano:</label>
-    <input type="text" th:field="*{ano}" disabled><br>
+    <input type="text" th:value="${aluno.ano}" disabled><br>
 
     <h2>Links</h2>
     <label>LinkedIn:</label>
-    <input type="url" th:field="*{linkedIn}" disabled><br>
+    <input type="url" th:value="${aluno.linkedIn}" disabled><br>
 
     <label>GitHub:</label>
-    <input type="url" th:field="*{gitHub}" disabled><br>
+    <input type="url" th:value="${aluno.gitHub}" disabled><br>
 
     <label>Lattes:</label>
-    <input type="url" th:field="*{lattes}" disabled><br>
+    <input type="url" th:value="${aluno.lattes}" disabled><br>
 
     <h2>Histórico</h2>
-    <textarea th:field="*{historico}" rows="5" cols="50" disabled></textarea><br>
+    <textarea rows="5" cols="50" disabled th:text="${aluno.historico}"></textarea><br>
 
     <h2>Conquistas</h2>
-    <textarea th:field="*{conquistas}" rows="5" cols="50" disabled></textarea><br>
+    <textarea rows="5" cols="50" disabled th:text="${aluno.conquistas}"></textarea><br>
 
     <h2>Consentimento</h2>
     <label>Concorda com a publicação das informações?</label>
-    <input type="checkbox" th:field="*{consentePublicacao}" disabled><br><br>
+    <input type="checkbox" th:checked="${aluno.consentePublicacao}" disabled><br><br>
 
     <h2>Validação</h2>
+
     <label>
-        <input type="checkbox" name="validado" required>
-        Concordo com o estado do perfil e aprovo esta publicação
+        <input type="radio" name="statusValidacao" value="APROVADO" required>
+        Aprovar perfil
+    </label><br>
+
+    <label>
+        <input type="radio" name="statusValidacao" value="REJEITADO">
+        Rejeitar perfil
     </label><br><br>
 
-    <button type="submit">Validar Perfil</button>
+    <div id="motivoRejeicaoDiv" style="display: none;">
+        <label>Motivo da rejeição:</label><br>
+        <textarea name="motivoRejeicao" rows="4" cols="50" placeholder="Explique por que este perfil foi rejeitado..."></textarea>
+    </div><br>
+
+    <button type="submit">Confirmar</button>
 </form>
 
 <a th:href="@{/validar-postagens}">Voltar à lista</a>
+
+<script>
+    const radios = document.querySelectorAll('input[name="statusValidacao"]');
+    const motivoDiv = document.getElementById('motivoRejeicaoDiv');
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', function () {
+            if (this.value === 'REJEITADO') {
+                motivoDiv.style.display = 'block';
+            } else {
+                motivoDiv.style.display = 'none';
+            }
+        });
+    });
+</script>
 </body>
 </html>
