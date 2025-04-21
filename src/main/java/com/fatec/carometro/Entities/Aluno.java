@@ -22,7 +22,7 @@ public class Aluno {
     private String curso;
 
     @NotBlank(message = "O ano é obrigatório")
-    private String ano;
+    private Integer ano;
 
     @Lob
     private byte[] foto;

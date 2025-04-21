@@ -39,7 +39,7 @@
     <span class="field-error" th:if="${#fields.hasErrors('curso')}" th:errors="*{curso}"></span><br>
 
     <label for="ano">Ano:</label>
-    <input type="text" id="ano" th:field="*{ano}" required>
+    <input type="number" id="ano" th:field="*{ano}" required>
     <span class="field-error" th:if="${#fields.hasErrors('ano')}" th:errors="*{ano}"></span><br>
 
     <h2>Links</h2>

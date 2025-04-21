@@ -10,7 +10,7 @@ import java.io.IOException;
 public record AlunoDTO(
         @NotBlank String nome,
         @NotBlank String curso,
-        @NotBlank String ano,
+        @NotBlank Integer ano,
         String linkedIn,
         String gitHub,
         String lattes,
@@ -19,11 +19,11 @@ public record AlunoDTO(
         Boolean consentePublicacao,
         @NotNull MultipartFile foto
 )  {
-    public Aluno toEntity() throws IOException {
+    public Aluno toEntity() throws IOException, NumberFormatException {
         Aluno aluno = new Aluno();
         aluno.setNome(this.nome());
         aluno.setCurso(this.curso());
-        aluno.setAno(this.ano());
+        aluno.setAno(ano);
         aluno.setLinkedIn(this.linkedIn());
         aluno.setGitHub(this.gitHub());
         aluno.setLattes(this.lattes());

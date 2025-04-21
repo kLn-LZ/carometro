@@ -11,7 +11,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public String handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request, Model model) {
-        model.addAttribute("error", "Por favor, corrija os erros no formulário.");
         model.addAttribute("aluno", ex.getBindingResult().getTarget());
         return request.getRequestURL().insert(0, "redirect:").toString();
     }
