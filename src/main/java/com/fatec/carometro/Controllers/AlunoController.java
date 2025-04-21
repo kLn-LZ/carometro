@@ -30,23 +30,19 @@ public class AlunoController {
     @PostMapping("/registroAluno")
     public String registraAluno(@ModelAttribute @Valid AlunoDTO alunoDTO,
                                 BindingResult result,
-                                Model model) throws IOException {
-        if (result.hasErrors()) {
-            result.getFieldErrors().forEach(error ->
-                    System.out.println("Erro no campo '" + error.getField() + "': " + error.getDefaultMessage())
-            );
-            model.addAttribute("error", "Por favor, corrija os erros no formulário.");
-            return "registroAluno";
-        }
-        MultipartFile foto = alunoDTO.foto();
-        if (foto == null || foto.isEmpty()) {
-            model.addAttribute("error", "A foto é obrigatória.");
-            return "registroAluno";
-        }
+                                Model model) {
+        if (result.hasErrors())
+            throw new RuntimeException("Por favor, corrija os erros no formulário.");
 
-        Aluno aluno = alunoDTO.toEntity();
+        if (alunoDTO.foto() == null || alunoDTO.foto().isEmpty())
+            throw new RuntimeException("A foto é obrigatória.");
 
-        alunoService.registraAluno(aluno);
+        try {
+            Aluno aluno = alunoDTO.toEntity();
+            alunoService.registraAluno(aluno);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return "registroSucesso";
     }
 
