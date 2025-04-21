@@ -39,9 +39,12 @@ public class UsuarioService {
     }
 
     public Usuario autenticar(String email, String senha) {
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new LoginException("Email ou senha inválidos."));
-        if (!descriptografaSenha(usuario.getSenha(), senha))
-            throw new LoginException("Email ou senha inválidos.");
+        Usuario usuario = null;
+        if(!email.isBlank() && !senha.isBlank()) {
+            usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new LoginException("Email ou senha inválidos."));
+            if (!descriptografaSenha(usuario.getSenha(), senha))
+                throw new LoginException("Email ou senha inválidos.");
+        }
         return usuario;
     }
 }
