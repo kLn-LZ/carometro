@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Validação de Postagens</title>
+</head>
+<body>
+<h1>Postagens Pendentes de Validação</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Nome</th>
+        <th>Curso</th>
+        <th>Ano</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="aluno : ${alunosPendentes}">
+        <td th:text="${aluno.nome}">Nome</td>
+        <td th:text="${aluno.curso}">Curso</td>
+        <td th:text="${aluno.ano}">Ano</td>
+        <td>
+            <a th:href="@{/validar-aluno/{id}(id=${aluno.id})}">Validar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/menu-adm}">Voltar ao Menu</a>
+</body>
+</html>

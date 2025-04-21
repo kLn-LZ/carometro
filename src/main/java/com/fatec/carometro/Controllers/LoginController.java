@@ -3,6 +3,7 @@ package com.fatec.carometro.Controllers;
 import com.fatec.carometro.Entities.TipoUsuario;
 import com.fatec.carometro.Entities.Usuario;
 import com.fatec.carometro.Repositories.UsuarioRepository;
+import com.fatec.carometro.Services.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ import java.util.Optional;
 public class LoginController {
 
     @Autowired
-    private UsuarioRepository usuarioRepo;
+    private UsuarioService usuarioService;
 
     @GetMapping("/login")
     public String mostrarLogin() {
@@ -26,20 +27,16 @@ public class LoginController {
 
     @PostMapping("/login")
     public String processarLogin(@RequestParam String email, @RequestParam String senha, HttpSession session, Model model) {
-        Usuario usuario = usuarioService.login(email, senha);
+        Optional<Usuario> usuarioOpt = usuarioService.autenticar(email, senha);
 
-        if (usuario == null) {
-            model.addAttribute("erro", "Login inválido");
+        if (usuarioOpt.isEmpty()) {
+            model.addAttribute("erro", "Email ou senha inválidos.");
             return "login";
         }
 
-        session.setAttribute("usuario", usuario);
-
-        if (usuario.getTipo().equals("aluno")) return "redirect:/menu-aluno";
-
-        if (usuario.getTipo().equals("adm")) return "redirect:/menu-adm";
-
-        return "login";
+        session.setAttribute("usuarioLogado", usuarioOpt.get());
+        if (usuarioOpt.get().getTipo() == TipoUsuario.ADMIN) return "menu-admn";
+        else return "menu-aluno";
     }
 
     @GetMapping("/visitante")

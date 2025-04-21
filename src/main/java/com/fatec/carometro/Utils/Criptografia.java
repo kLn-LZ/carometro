@@ -7,6 +7,6 @@ public class Criptografia {
         return BCrypt.hashpw(senha, BCrypt.gensalt());
     }
     static public boolean descriptografaSenha(String senhaArmazeada, String senhaEntrada) {
-        return BCrypt.checkpw(senhaArmazeada, senhaEntrada);
+        return BCrypt.checkpw(senhaEntrada, senhaArmazeada);
     }
 }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Validação de Aluno - Carômetro</title>
+    <style>
+        #fotoPreview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Validação de Aluno - Carômetro</h1>
+
+<form th:action="@{/validar-aluno}" th:object="${aluno}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <h2>Foto</h2>
+    <div>
+        <img id="fotoPreview"
+             th:src="'data:image/jpeg;base64,' + ${T(java.util.Base64).getEncoder().encodeToString(aluno.foto)}"
+             alt="Foto do aluno">
+    </div>
+
+    <h2>Dados Pessoais</h2>
+    <label>Nome:</label>
+    <input type="text" th:field="*{nome}" disabled><br>
+
+    <label>Curso:</label>
+    <input type="text" th:field="*{curso}" disabled><br>
+
+    <label>Ano:</label>
+    <input type="text" th:field="*{ano}" disabled><br>
+
+    <h2>Links</h2>
+    <label>LinkedIn:</label>
+    <input type="url" th:field="*{linkedIn}" disabled><br>
+
+    <label>GitHub:</label>
+    <input type="url" th:field="*{gitHub}" disabled><br>
+
+    <label>Lattes:</label>
+    <input type="url" th:field="*{lattes}" disabled><br>
+
+    <h2>Histórico</h2>
+    <textarea th:field="*{historico}" rows="5" cols="50" disabled></textarea><br>
+
+    <h2>Conquistas</h2>
+    <textarea th:field="*{conquistas}" rows="5" cols="50" disabled></textarea><br>
+
+    <h2>Consentimento</h2>
+    <label>Concorda com a publicação das informações?</label>
+    <input type="checkbox" th:field="*{consentePublicacao}" disabled><br><br>
+
+    <h2>Validação</h2>
+    <label>
+        <input type="checkbox" name="validado" required>
+        Concordo com o estado do perfil e aprovo esta publicação
+    </label><br><br>
+
+    <button type="submit">Validar Perfil</button>
+</form>
+
+<a th:href="@{/validar-postagens}">Voltar à lista</a>
+</body>
+</html>

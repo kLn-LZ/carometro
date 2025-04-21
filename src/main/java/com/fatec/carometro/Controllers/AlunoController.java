@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -57,5 +54,26 @@ public class AlunoController {
             model.addAttribute("error", e.getMessage());
             return "registroAluno";
         }
+    }
+
+    @GetMapping("/validar-aluno/{id}")
+    public String exibirValidacao(@PathVariable Long id, Model model) {
+        Aluno aluno = alunoService.buscarPorId(id)
+                .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado"));
+        model.addAttribute("aluno", aluno);
+        return "validar-aluno";
+    }
+
+    @PostMapping("/validar-aluno")
+    public String validarAluno(@RequestParam Long id) {
+        alunoService.validar(id); // método que define como validado no banco
+        return "redirect:/validar-postagens";
+    }
+
+    @GetMapping("/validar-postagens")
+    public String listarPostagensPendentes(Model model) {
+        List<Aluno> alunosPendentes = alunoService.buscarAlunosPendentes(); //
+        model.addAttribute("alunosPendentes", alunosPendentes);
+        return "validar-postagens";
     }
 }

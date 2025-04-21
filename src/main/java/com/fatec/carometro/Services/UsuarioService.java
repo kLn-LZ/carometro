@@ -26,22 +26,22 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public Usuario buscarPorId(Long id) {
-        return usuarioRepository.findById(id).orElse(null);
+    public Optional<Usuario> buscarPorId(Long id) {
+        return usuarioRepository.findById(id);
     }
 
     public void excluir(Long id) {
         usuarioRepository.deleteById(id);
     }
 
-    public Usuario autenticar(String email, String senha) {
+    public Optional<Usuario> autenticar(String email, String senha) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
-        if (usuarioOpt.isEmpty()) throw new RuntimeException("Usuário Não Encontrado");
+        if (usuarioOpt.isEmpty()) return Optional.empty();
 
         Usuario usuario = usuarioOpt.get();
-        if (!descriptografaSenha(senha, usuario.getSenha())) throw new RuntimeException(("Senha Incorreta"));
+        if (!descriptografaSenha(usuario.getSenha(), senha)) return Optional.empty();
 
-        return usuario;
+        return Optional.of(usuario);
     }
 }

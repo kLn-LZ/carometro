@@ -36,4 +36,5 @@ public class Aluno {
     @NotBlank(message = "As conquistas são obrigatórias")
     private String conquistas;
     private boolean consentePublicacao;
+    private boolean validado;
 }
