@@ -14,19 +14,16 @@ public class AlunoService {
     @Autowired
     private AlunoRepository alunoRepository;
 
-    public Optional<Aluno> buscarPorId(Long id) {
-        return alunoRepository.findById(id);
+    public Aluno buscarPorId(Long id) {
+        return alunoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado"));
     }
 
     public List<Aluno> buscarAlunosPendentes() {
         return alunoRepository.findByValidadoFalse();
-
     }
-
 
     public Aluno registraAluno(Aluno aluno) {
         if (!aluno.isConsentePublicacao()) throw new RuntimeException("Precisa-se de consentimento para publicação");
-
         Aluno alunoRegistrado = alunoRepository.save(aluno);
         return alunoRegistrado;
     }

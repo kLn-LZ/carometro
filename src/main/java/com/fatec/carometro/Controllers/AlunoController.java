@@ -38,28 +38,21 @@ public class AlunoController {
             model.addAttribute("error", "Por favor, corrija os erros no formulário.");
             return "registroAluno";
         }
-
-        try {
-            MultipartFile foto = alunoDTO.foto();
-            if (foto == null || foto.isEmpty()) {
-                model.addAttribute("error", "A foto é obrigatória.");
-                return "registroAluno";
-            }
-
-            Aluno aluno = alunoDTO.toEntity();
-
-            alunoService.registraAluno(aluno);
-            return "registroSucesso";
-        } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
+        MultipartFile foto = alunoDTO.foto();
+        if (foto == null || foto.isEmpty()) {
+            model.addAttribute("error", "A foto é obrigatória.");
             return "registroAluno";
         }
+
+        Aluno aluno = alunoDTO.toEntity();
+
+        alunoService.registraAluno(aluno);
+        return "registroSucesso";
     }
 
     @GetMapping("/validar-aluno/{id}")
     public String exibirValidacao(@PathVariable Long id, Model model) {
-        Aluno aluno = alunoService.buscarPorId(id)
-                .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado"));
+        Aluno aluno = alunoService.buscarPorId(id);
         model.addAttribute("aluno", aluno);
         return "validar-aluno";
     }
