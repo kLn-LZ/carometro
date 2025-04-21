@@ -1,0 +1,75 @@
+body {
+    background-color: #d3d3d3;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+/* Centraliza tudo dentro do login */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Formulário bonitinho */
+form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Título */
+h1 {
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+/* Inputs */
+input {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Botão */
+button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: blue;
+}
+
+/* Links abaixo do form */
+.login-links  {
+    margin-top: 15px;
+    text-align: center;
+}
+
+
+.login-links a {
+    color: white;
+    display: block;
+    margin-top: 5px;
+    text-decoration: underline;
+}
+
+.login-links a:hover  {
+    color: blue;
+}
+

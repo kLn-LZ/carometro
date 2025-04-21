@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Login</title></head>
+<head>
+	<link rel="stylesheet" href="/css/login.css">
+	<title>Login</title>
+</head>
 <body>
-<h1>Login</h1>
-<form th:action="@{/login}" method="post">
-    <label>Email:</label>
-    <input type="email" name="email" required/><br/>
-    <label>Senha:</label>
-    <input type="password" name="senha" required/><br/>
-    <button type="submit">Entrar</button>
-</form>
-<div th:if="${erro}" th:text="${erro}" style="color:red;"></div>
-<a th:href="@{/usuarios/novo}">Cadastrar-se</a>
-<br/>
-<a th:href="@{/feed-publico}">Entrar como Visitante</a>
+
+<div class="login-container">
+	<h1>Login</h1>
+
+	<form th:action="@{/login}" method="post">
+	    <label>Email:</label>
+	    <input type="email" name="email" required/><br/>
+	    <label>Senha:</label>
+	    <input type="password" name="senha" required/><br/>
+	    <button type="submit">Entrar</button>
+
+	    <div th:if="${erro}" th:text="${erro}" style="color:red;"></div>
+	</form>
+
+	<!-- Links agora dentro do container -->
+	<div class="login-links">
+	    <a th:href="@{/usuarios/novo}">Cadastrar-se</a>
+	    <a th:href="@{/feed-publico}">Entrar como Visitante</a>
+	</div>
+</div>
+
 </body>
 </html>
