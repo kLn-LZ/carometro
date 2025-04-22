@@ -2,6 +2,7 @@ package com.fatec.carometro.Entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class Aluno {
     @NotBlank(message = "O curso é obrigatório")
     private String curso;
 
-    @NotBlank(message = "O ano é obrigatório")
+    @NotNull(message = "O ano é obrigatório")
     private Integer ano;
 
     @Lob

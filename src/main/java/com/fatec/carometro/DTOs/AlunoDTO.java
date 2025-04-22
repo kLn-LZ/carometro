@@ -10,7 +10,7 @@ import java.io.IOException;
 public record AlunoDTO(
         @NotBlank String nome,
         @NotBlank String curso,
-        @NotBlank Integer ano,
+        @NotNull Integer ano,
         String linkedIn,
         String gitHub,
         String lattes,

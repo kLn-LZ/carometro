@@ -5,6 +5,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -22,8 +23,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public String handleGenericException(Exception ex, HttpServletRequest request, Model model) {
-        model.addAttribute("error", "Ocorreu um erro inesperado: " + ex.getMessage());
-        return request.getRequestURL().insert(0, "redirect:").toString();
+    public String handleGenericException(Exception ex, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("error", "Ocorreu um erro inesperado: " + ex.getMessage());
+        return "redirect:" + request.getRequestURI();
     }
 }
