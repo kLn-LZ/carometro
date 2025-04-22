@@ -2,12 +2,13 @@ package com.fatec.carometro.DTOs;
 
 import com.fatec.carometro.Entities.Aluno;
 import com.fatec.carometro.Entities.Validacao;
+import com.fatec.carometro.Utils.CustomMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 public record AlunoDTO(
-        Integer id,
+        Long id,
         String nome,
         String curso,
         Integer ano,
@@ -23,16 +24,19 @@ public record AlunoDTO(
 )  {
 
     public AlunoDTO(Aluno aluno){
-        this(aluno.getNome(),
+        this(aluno.getId(),
+                aluno.getNome(),
                 aluno.getCurso(),
                 aluno.getAno(),
                 aluno.getLinkedIn(),
                 aluno.getGitHub(),
                 aluno.getLattes(),
                 aluno.getHistorico(),
-                aluno.getConquistas(),
+                aluno.getComentarios(),
                 aluno.isConsentePublicacao(),
-               null);
+                new CustomMultipartFile(aluno.getFoto(), "foto", null, "image/jpeg"),
+                aluno.getValidado(),
+                aluno.getDescricaoReprovacao());
     }
 
     public Aluno toEntity() throws IOException, NumberFormatException {
