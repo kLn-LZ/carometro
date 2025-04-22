@@ -9,6 +9,9 @@
             max-height: 200px;
             margin-top: 10px;
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -20,7 +23,7 @@
     <h2>Foto</h2>
     <div>
         <img id="fotoPreview"
-             th:src="'data:image/jpeg;base64,' + ${T(java.util.Base64).getEncoder().encodeToString(aluno.foto)}"
+             th:src="'data:image/jpeg;base64,' + ${fotoBase64}"
              alt="Foto do aluno">
     </div>
 
@@ -47,22 +50,39 @@
     <h2>Histórico</h2>
     <textarea th:field="*{historico}" rows="5" cols="50" disabled></textarea><br>
 
-    <h2>Conquistas</h2>
-    <textarea th:field="*{conquistas}" rows="5" cols="50" disabled></textarea><br>
+    <h2>comentarios</h2>
+    <textarea th:field="*{comentarios}" rows="5" cols="50" disabled></textarea><br>
 
     <h2>Consentimento</h2>
     <label>Concorda com a publicação das informações?</label>
     <input type="checkbox" th:field="*{consentePublicacao}" disabled><br><br>
 
     <h2>Validação</h2>
-    <label>
-        <input type="checkbox" name="validado" required>
-        Concordo com o estado do perfil e aprovo esta publicação
-    </label><br><br>
+    <label for="validado">Estado do Perfil:</label>
+    <select th:field="*{validado}" required id="validadoSelect">
+        <option value="APROVADO" th:selected="${aluno.validado == 'APROVADO'}">Aprovado</option>
+        <option value="REPROVADO" th:selected="${aluno.validado == 'REPROVADO'}">Reprovado</option>
+    </select><br><br>
+
+    <div id="descricaoReprovacaoDiv" class="hidden" th:classappend="${aluno.validado == 'REPROVADO'} ? '' : 'hidden'">
+        <label for="descricaoReprovacao">Descrição da Reprovação:</label>
+        <textarea th:field="*{descricaoReprovacao}" rows="4" cols="50" placeholder="Descreva o motivo da reprovação"></textarea><br><br>
+    </div>
 
     <button type="submit">Validar Perfil</button>
 </form>
 
 <a th:href="@{/validar-postagens}">Voltar à lista</a>
+
+<script>
+    document.getElementById('validadoSelect').addEventListener('change', function() {
+        const descricaoDiv = document.getElementById('descricaoReprovacaoDiv');
+        if (this.value === 'REPROVADO') {
+            descricaoDiv.classList.remove('hidden');
+        } else {
+            descricaoDiv.classList.add('hidden');
+        }
+    });
+</script>
 </body>
 </html>

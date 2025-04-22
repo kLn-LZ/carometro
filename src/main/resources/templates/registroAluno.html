@@ -18,16 +18,36 @@
             color: red;
             font-size: 0.9em;
         }
+        .rejection-section {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ff0000;
+            background-color: #ffe6e6;
+        }
+        .rejection-section h3 {
+            color: #ff0000;
+            margin-top: 0;
+        }
     </style>
 </head>
 <body>
-<h1>Registro de Aluno - Carômetro</h1>
+<h1 th:text="${alunoDTO.id == null} ? 'Registro de Aluno - Carômetro' : 'Editar Aluno - Carômetro'"></h1>
 <p th:if="${error}" class="error" th:text="${error}"></p>
+
+<div th:if="${alunoDTO.id != null and alunoDTO.validado == 'REPROVADO'}" class="rejection-section">
+    <h3>Status do Perfil: Reprovado</h3>
+    <p><strong>Justificativa da Reprovação:</strong></p>
+    <p th:text="${alunoDTO.descricaoReprovacao}"></p>
+</div>
+
 <form th:action="@{/registroAluno}" th:object="${alunoDTO}" method="post" enctype="multipart/form-data">
+    <input type="hidden" th:field="*{id}" />
+
     <h2>Foto</h2>
     <label for="foto">Foto (Sozinho ou em Família):</label>
-    <input type="file" id="foto" name="foto" accept="image/*" required onchange="previewImage(event)"><br>
-    <img id="fotoPreview" alt="Pré-visualização da Foto">
+    <input type="file" id="foto" name="foto" accept="image/*" th:required="${alunoDTO.id == null}" onchange="previewImage(event)">
+    <span class="field-error" th:if="${#fields.hasErrors('foto')}" th:errors="*{foto}"></span><br>
+    <img id="fotoPreview" th:src="${alunoDTO.foto != null} ? 'data:image/jpeg;base64,' + ${alunoDTO.foto} : ''" alt="Pré-visualização da Foto" th:style="${alunoDTO.foto != null} ? 'display: block' : 'display: none'">
 
     <h2>Dados Pessoais</h2>
     <label for="nome">Nome:</label>
@@ -60,10 +80,10 @@
     <textarea id="historico" th:field="*{historico}" required></textarea>
     <span class="field-error" th:if="${#fields.hasErrors('historico')}" th:errors="*{historico}"></span><br>
 
-    <h2>Conquistas</h2>
-    <label for="conquistas">Conquistas (Apenas na FATEC):</label>
-    <textarea id="conquistas" th:field="*{conquistas}" required></textarea>
-    <span class="field-error" th:if="${#fields.hasErrors('conquistas')}" th:errors="*{conquistas}"></span><br>
+    <h2>comentarios</h2>
+    <label for="comentarios">comentarios (Apenas na FATEC):</label>
+    <textarea id="comentarios" th:field="*{comentarios}" required></textarea>
+    <span class="field-error" th:if="${#fields.hasErrors('comentarios')}" th:errors="*{comentarios}"></span><br>
 
     <h2>Consentimento</h2>
     <label for="consentePublicacao">Concordo com a publicação das minhas informações:</label>

@@ -27,7 +27,7 @@ public class LoginController {
         Usuario usuario = usuarioService.autenticar(email, senha);
         session.setAttribute("usuarioLogado", usuario);
         if (usuario.getTipo() == TipoUsuario.ADMIN)
-            return "menu-admn";
+            return "menu-adm";
         else
             return "menu-aluno";
     }

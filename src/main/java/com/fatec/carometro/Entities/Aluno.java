@@ -34,8 +34,13 @@ public class Aluno {
     @NotBlank(message = "O histórico é obrigatório")
     private String historico;
 
-    @NotBlank(message = "As conquistas são obrigatórias")
-    private String conquistas;
+    @NotBlank(message = "As comentarios são obrigatórias")
+    private String comentarios;
     private boolean consentePublicacao;
-    private boolean validado;
+
+    @Column(name = "validado", columnDefinition = "VARCHAR(50)")
+    @Enumerated(EnumType.STRING)
+    private Validacao validado;
+
+    private String descricaoReprovacao; 
 }
