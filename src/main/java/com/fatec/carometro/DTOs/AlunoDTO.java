@@ -19,6 +19,20 @@ public record AlunoDTO(
         Boolean consentePublicacao,
         @NotNull MultipartFile foto
 )  {
+
+    public AlunoDTO(Aluno aluno){
+        this(aluno.getNome(),
+                aluno.getCurso(),
+                aluno.getAno(),
+                aluno.getLinkedIn(),
+                aluno.getGitHub(),
+                aluno.getLattes(),
+                aluno.getHistorico(),
+                aluno.getConquistas(),
+                aluno.isConsentePublicacao(),
+               null);
+    }
+
     public Aluno toEntity() throws IOException, NumberFormatException {
         Aluno aluno = new Aluno();
         aluno.setNome(this.nome());

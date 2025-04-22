@@ -1,12 +1,13 @@
 package com.fatec.carometro.Services;
 
+import com.fatec.carometro.DTOs.AlunoDTO;
 import com.fatec.carometro.Entities.Aluno;
+import com.fatec.carometro.Exceptions.CadastroAlunoException;
 import com.fatec.carometro.Repositories.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AlunoService {
@@ -23,9 +24,8 @@ public class AlunoService {
     }
 
     public Aluno registraAluno(Aluno aluno) {
-        if (!aluno.isConsentePublicacao()) throw new RuntimeException("Precisa-se de consentimento para publicação");
-        Aluno alunoRegistrado = alunoRepository.save(aluno);
-        return alunoRegistrado;
+        if (!aluno.isConsentePublicacao()) throw new CadastroAlunoException(new AlunoDTO(aluno), "Precisa-se de consentimento para publicação");
+        return alunoRepository.save(aluno);
     }
 
     public void validar(Long id) {
