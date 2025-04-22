@@ -110,6 +110,14 @@
             preview.style.display = 'none';
         }
     }
+
+    document.querySelector("form").addEventListener("submit", function(event) {
+        const checkbox = document.getElementById("consentePublicacao");
+        if (!checkbox.checked) {
+            event.preventDefault();
+            alert("Precisa-se de consentimento para publicação");
+        }
+    });
 </script>
 </body>
 </html>

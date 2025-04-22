@@ -17,13 +17,20 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(LoginException.class)
-    public String handleLoginException(Exception ex, Model model) {
+    public String handleLoginExceptions(LoginException ex, Model model) {
         model.addAttribute("error", ex.getMessage());
         return "login";
     }
 
+    @ExceptionHandler(CadastroAlunoException.class)
+    public String handleCadastroAlunoExceptions(CadastroAlunoException ex, Model model) {
+        model.addAttribute("error", ex.getMessage());
+        model.addAttribute("alunoDTO", ex.getAlunoDTO());
+        return "registroAluno";
+    }
+
     @ExceptionHandler(Exception.class)
-    public String handleGenericException(Exception ex, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public String handleGenericExceptions(Exception ex, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("error", "Ocorreu um erro inesperado: " + ex.getMessage());
         return "redirect:" + request.getRequestURI();
     }

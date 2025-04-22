@@ -1,7 +1,9 @@
 package com.fatec.carometro.Services;
 
 import com.fatec.carometro.DTOs.AlunoDTO;
+import com.fatec.carometro.DTOs.AlunoDTO;
 import com.fatec.carometro.Entities.Aluno;
+import com.fatec.carometro.Entities.Validacao;
 import com.fatec.carometro.Entities.Validacao;
 import com.fatec.carometro.Repositories.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
