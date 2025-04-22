@@ -33,5 +33,6 @@ public class GlobalExceptionHandler {
     public String handleGenericExceptions(Exception ex, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("error", "Ocorreu um erro inesperado: " + ex.getMessage());
         return "redirect:" + request.getRequestURI();
+
     }
 }

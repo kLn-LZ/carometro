@@ -50,4 +50,8 @@ public class AlunoService {
     public AlunoDTO getAlunoDTOById(Long id) {
         return null;
     }
+    
+    public List<Aluno> buscarAlunosAprovados(){
+    	return alunoRepository.findByValidado(Validacao.APROVADO);
+    }
 }

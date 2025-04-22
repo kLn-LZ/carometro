@@ -1,21 +1,30 @@
 package com.fatec.carometro.Controllers;
 
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fatec.carometro.DTOs.AlunoDTO;
 import com.fatec.carometro.Entities.Aluno;
 import com.fatec.carometro.Entities.Validacao;
 import com.fatec.carometro.Services.AlunoService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import jakarta.validation.Valid;
 
 @Controller
 public class AlunoController {
@@ -76,5 +85,20 @@ public class AlunoController {
         List<Aluno> alunosPendentes = alunoService.buscarAlunosPendentes(); //
         model.addAttribute("alunosPendentes", alunosPendentes);
         return "validar-postagens";
+    }
+    
+    @GetMapping("/feed")
+    public String listarAlunosAprovados(Model model){
+    	model.addAttribute("alunos", alunoService.buscarAlunosAprovados());
+    	return "feed";
+    }
+    
+    @GetMapping("/aluno/{id}/foto")
+    public ResponseEntity<byte[]> getFoto(@PathVariable Long id) {
+        Aluno aluno = alunoService.buscarPorId(id);
+        
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(aluno.getFoto());
     }
 }
