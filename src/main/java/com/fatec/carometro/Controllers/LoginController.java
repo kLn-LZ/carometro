@@ -17,6 +17,11 @@ public class LoginController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @GetMapping("/")
+    public String telaInicial() {
+        return "login";
+    }
+
     @GetMapping("/login")
     public String mostrarLogin() {
         return "login";
