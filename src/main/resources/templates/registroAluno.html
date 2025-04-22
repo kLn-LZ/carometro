@@ -1,34 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
+	<link rel="stylesheet" href="/css/registroAluno.css">
     <meta charset="UTF-8">
     <title>Registro de Aluno - Carômetro</title>
-    <style>
-        #fotoPreview {
-            max-width: 200px;
-            max-height: 200px;
-            margin-top: 10px;
-            display: none;
-        }
-        .error {
-            color: red;
-            font-weight: bold;
-        }
-        .field-error {
-            color: red;
-            font-size: 0.9em;
-        }
-        .rejection-section {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ff0000;
-            background-color: #ffe6e6;
-        }
-        .rejection-section h3 {
-            color: #ff0000;
-            margin-top: 0;
-        }
-    </style>
 </head>
 <body>
 <h1 th:text="${alunoDTO.id == null} ? 'Registro de Aluno - Carômetro' : 'Editar Aluno - Carômetro'"></h1>

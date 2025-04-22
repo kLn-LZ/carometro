@@ -1,0 +1,118 @@
+/* Resetando margens e paddings para garantir um layout consistente */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo do body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Cor de fundo suave */
+    color: #333; /* Cor do texto */
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Estilo do título principal */
+h1 {
+    text-align: center;
+    font-size: 2.5em;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Estilo das seções do formulário */
+h2 {
+    font-size: 1.8em;
+    color: #34495e;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Estilo das labels */
+label {
+    font-size: 1.1em;
+    color: #2c3e50;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+/* Estilo dos inputs de texto e outros campos */
+input[type="text"], input[type="url"], textarea, input[type="checkbox"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+/* Estilo do textarea */
+textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+/* Estilo da imagem de pré-visualização */
+#fotoPreview {
+    max-width: 200px;
+    max-height: 200px;
+    margin-top: 10px;
+    display: none;
+}
+
+/* Estilo para mensagens de erro */
+.error {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.field-error {
+    color: red;
+    font-size: 0.9em;
+}
+
+/* Estilo do botão de envio */
+button[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    padding: 12px 20px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+/* Estilo para o link de sucesso */
+p {
+    font-size: 1.1em;
+    text-align: center;
+    margin-top: 20px;
+    color: green;
+}
+
+/* Estilo dos links */
+a {
+    color: #3498db;
+    font-size: 1.2em;
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+a:hover {
+    background-color: #2980b9;
+    color: white;
+}
