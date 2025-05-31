@@ -9,10 +9,10 @@
 <h1 th:text="${alunoDTO.id == null} ? 'Registro de Aluno - Carômetro' : 'Editar Aluno - Carômetro'"></h1>
 <p th:if="${error}" class="error" th:text="${error}"></p>
 
-<div th:if="${alunoDTO.id != null and alunoDTO.validado == 'REPROVADO'}" class="rejection-section">
-    <h3>Status do Perfil: Reprovado</h3>
-    <p><strong>Justificativa da Reprovação:</strong></p>
-    <p th:text="${alunoDTO.descricaoReprovacao}"></p>
+<div  th:if="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).REPROVADO and alunoDTO.descricaoReprovacao != null}"
+     style="color: red; margin-bottom: 1em;">
+    <p><strong>Status do Perfil:</strong> Reprovado</p>
+    <p><strong>Justificativa:</strong> <span th:text="${alunoDTO.descricaoReprovacao}"></span></p>
 </div>
 
 <form th:action="@{/registroAluno}" th:object="${alunoDTO}" method="post" enctype="multipart/form-data">
@@ -22,16 +22,22 @@
     <label for="foto">Foto (Sozinho ou em Família):</label>
     <input type="file" id="foto" name="foto" accept="image/*" th:required="${alunoDTO.id == null}" onchange="previewImage(event)">
     <span class="field-error" th:if="${#fields.hasErrors('foto')}" th:errors="*{foto}"></span><br>
-    <img id="fotoPreview" th:src="${alunoDTO.foto != null} ? 'data:image/jpeg;base64,' + ${alunoDTO.foto} : ''" alt="Pré-visualização da Foto" th:style="${alunoDTO.foto != null} ? 'display: block' : 'display: none'">
+    <img id="fotoPreview" th:src="${alunoDTO.fotoBase64 != null} ? 'data:image/jpeg;base64,' + ${alunoDTO.fotoBase64} : ''" alt="Pré-visualização da Foto" th:style="${alunoDTO.fotoBase64 != null} ? 'display: block' : 'display: none'">
 
     <h2>Dados Pessoais</h2>
     <label for="nome">Nome:</label>
     <input type="text" id="nome" th:field="*{nome}" required>
     <span class="field-error" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span><br>
 
-    <label for="curso">Curso:</label>
-    <input type="text" id="curso" th:field="*{curso}" required>
-    <span class="field-error" th:if="${#fields.hasErrors('curso')}" th:errors="*{curso}"></span><br>
+    <label for="cursoId">Curso:</label>
+    <select id="cursoId" th:field="*{cursoId}" required>
+        <option value="">Selecione um curso</option>
+        <option th:each="curso : ${cursos}"
+                th:value="${curso.id}"
+                th:text="${curso.nome}"
+                th:selected="${curso.id == alunoDTO.cursoId}"></option>
+    </select>
+    <span class="field-error" th:if="${#fields.hasErrors('cursoId')}" th:errors="*{cursoId}"></span><br>
 
     <label for="ano">Ano:</label>
     <input type="number" id="ano" th:field="*{ano}" required>
@@ -55,8 +61,8 @@
     <textarea id="historico" th:field="*{historico}" required></textarea>
     <span class="field-error" th:if="${#fields.hasErrors('historico')}" th:errors="*{historico}"></span><br>
 
-    <h2>comentarios</h2>
-    <label for="comentarios">comentarios (Apenas na FATEC):</label>
+    <h2>Comentários</h2>
+    <label for="comentarios">Comentários (Apenas na FATEC):</label>
     <textarea id="comentarios" th:field="*{comentarios}" required></textarea>
     <span class="field-error" th:if="${#fields.hasErrors('comentarios')}" th:errors="*{comentarios}"></span><br>
 

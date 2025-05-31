@@ -1,5 +1,7 @@
 package com.fatec.carometro.Services;
 
+import com.fatec.carometro.DTOs.UsuarioDTO;
+import com.fatec.carometro.Entities.Curso;
 import com.fatec.carometro.Entities.Usuario;
 import com.fatec.carometro.Exceptions.GlobalExceptionHandler;
 import com.fatec.carometro.Exceptions.LoginException;
@@ -21,12 +23,20 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private CursoService cursoService;
+
     public List<Usuario> listarTodos() {
         return usuarioRepository.findAll();
     }
 
-    public Usuario salvar(Usuario usuario) {
+    public Usuario salvar(UsuarioDTO usuarioDTO) {
+        Usuario usuario = usuarioDTO.toEntity();
         usuario.setSenha(criptografarSenha(usuario.getSenha()));
+        if (usuario.getCurso() != null && usuario.getCurso().getId() != null) {
+            Curso curso = cursoService.buscarPorId(usuario.getCurso().getId());
+            usuario.setCurso(curso);
+        }
         return usuarioRepository.save(usuario);
     }
 

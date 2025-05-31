@@ -1,29 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<link rel="stylesheet" href="/css/formulario.css">
-	<title>Formulário de Usuário</title>
+    <link rel="stylesheet" href="/css/formulario.css">
+    <title>Formulário de Usuário</title>
 </head>
 <body>
 <div class="form-container">
-    <h1 th:text="${usuario.id == null} ? 'Novo Usuário' : 'Editar Usuário'"></h1>
+    <h1 th:text="${usuarioDTO.id == null} ? 'Novo Usuário' : 'Editar Usuário'"></h1>
 
-    <form th:action="@{/usuarios}" th:object="${usuario}" method="post">
+    <form th:action="@{/usuarios}" th:object="${usuarioDTO}" method="post">
         <input type="hidden" th:field="*{id}"/>
+
         <label>Nome:</label>
-        <input type="text" th:field="*{nome}" required/><br/>
+        <input type="text" th:field="*{nome}" required/>
+        <span class="field-error" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span><br/>
 
         <label>Email:</label>
-        <input type="email" th:field="*{email}" required/><br/>
+        <input type="email" th:field="*{email}" required/>
+        <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span><br/>
 
         <label>Senha:</label>
-        <input type="password" th:field="*{senha}" required/><br/>
+        <input type="password" th:field="*{senha}" required/>
+        <span class="field-error" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></span><br/>
+
+        <label>Curso:</label>
+        <select th:field="*{cursoId}" required>
+            <option value="">Selecione um curso</option>
+            <option th:each="curso : ${cursos}"
+                    th:value="${curso.id}"
+                    th:text="${curso.nome}"
+                    th:selected="${curso.id == usuarioDTO.cursoId}"></option>
+        </select>
+        <span class="field-error" th:if="${#fields.hasErrors('cursoId')}" th:errors="*{cursoId}"></span><br/>
 
         <label>Tipo:</label>
-        <select th:field="*{tipo}">
-            <option th:value="ALUNO">Aluno</option>
-            <option th:value="ADMIN">Admin</option>
-        </select><br/>
+        <select th:field="*{tipo}" required>
+            <option value="">Selecione um tipo</option>
+            <option th:value="'ALUNO'">Aluno</option>
+            <option th:value="'ADMIN'">Admin</option>
+            <option th:value="'COORDENADOR'">Coordenador</option>
+        </select>
+        <span class="field-error" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></span><br/>
 
         <button type="submit">Salvar</button>
     </form>

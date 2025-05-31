@@ -1,6 +1,6 @@
 package com.fatec.carometro.Controllers;
 
-import com.fatec.carometro.Entities.TipoUsuario;
+import com.fatec.carometro.Entities.Coordenador;
 import com.fatec.carometro.Entities.Usuario;
 import com.fatec.carometro.Services.UsuarioService;
 import jakarta.servlet.http.HttpSession;
@@ -31,7 +31,7 @@ public class LoginController {
     public String processarLogin(@RequestParam String email, @RequestParam String senha, HttpSession session, Model model) {
         Usuario usuario = usuarioService.autenticar(email, senha);
         session.setAttribute("usuarioLogado", usuario);
-        if (usuario.getTipo() == TipoUsuario.ADMIN)
+        if (usuario instanceof Coordenador)
             return "menu-adm";
         else
             return "menu-aluno";
