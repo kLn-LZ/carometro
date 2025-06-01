@@ -11,4 +11,13 @@ public class Curso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String nome;
+
+    public Curso(){
+        super();
+    }
+
+    public Curso(Long id, String nome){
+        this.id = id;
+        this.nome = nome;
+    }
 }

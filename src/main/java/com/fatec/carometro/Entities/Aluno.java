@@ -18,4 +18,5 @@ public class Aluno extends Usuario{
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Validacao validacao;
+
 }

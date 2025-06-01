@@ -3,12 +3,17 @@ package com.fatec.carometro.Controllers;
 import java.io.IOException;
 import java.util.List;
 
+import com.fatec.carometro.DTOs.CursoDTO;
+import com.fatec.carometro.DTOs.UsuarioDTO;
+import com.fatec.carometro.DTOs.mappers.Mapper;
 import com.fatec.carometro.Entities.Curso;
 import com.fatec.carometro.Entities.Usuario;
 import com.fatec.carometro.Exceptions.AlunoNotFoundException;
+import com.fatec.carometro.Exceptions.CadastroAlunoException;
 import com.fatec.carometro.Services.CursoService;
 import com.fatec.carometro.Services.ValidacaoService;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,19 +48,24 @@ public class AlunoController {
     @Autowired
     private CursoService cursoService;
 
+    @Autowired
+    private Mapper<Aluno, AlunoDTO> alunoMapper;
+
+    @Autowired
+    private Mapper<Curso, CursoDTO> cursoMapper;
+
     @GetMapping("/registroAluno")
     public String mostraTelaRegistro(@RequestParam(value = "id", required = false) Long id, Model model, HttpSession session) {
-        Usuario usuarioLogado = (Usuario) session.getAttribute("usuarioLogado");
-
+        UsuarioDTO usuarioLogado = (UsuarioDTO) session.getAttribute("usuarioLogado");
         AlunoDTO alunoDTO;
-        if (usuarioLogado.getId() != null) {
-            alunoDTO = new AlunoDTO(alunoService.buscarPorId(usuarioLogado.getId()));
+        if (usuarioLogado.id() != null) {
+            alunoDTO = alunoMapper.entityToDto(alunoService.buscarPorId(usuarioLogado.id()));
         } else {
             alunoDTO = new AlunoDTO(null, null, null, null, null, null, null, null, null, null, null, false, null, null, null, null);
         }
 
         List<Curso> cursos = cursoService.buscarCursos();
-        model.addAttribute("cursos", cursos);
+        model.addAttribute("cursos", cursoMapper.toDtoList(cursos));
         model.addAttribute("alunoDTO", alunoDTO);
         return "registroAluno";
     }
@@ -63,31 +73,26 @@ public class AlunoController {
     @PostMapping("/registroAluno")
     public String registraAluno(@ModelAttribute @Valid AlunoDTO alunoDTO, BindingResult result,
                                 RedirectAttributes redirectAttributes, HttpSession session) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Por favor, corrija os erros no formulário.");
-            return "redirect:/registroAluno";
+        if (result.hasErrors())
+            throw new CadastroAlunoException(alunoDTO, "Por favor, corrija os erros no formulário.");
+
+
+        if (alunoDTO.foto() == null || alunoDTO.foto().isEmpty())
+            throw new CadastroAlunoException(alunoDTO, "A foto é obrigatória.");
+
+        if (!alunoDTO.consentePublicacao()) {
+            throw new CadastroAlunoException(alunoDTO, "É necessário consentimento para publicação.");
         }
 
-        if (alunoDTO.foto() == null || alunoDTO.foto().isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "A foto é obrigatória.");
-            return "redirect:/registroAluno";
-        }
-
-        try {
-            alunoService.registraAluno(alunoDTO, session);
-            redirectAttributes.addFlashAttribute("successMessage", "Aluno registrado com sucesso!");
-            return "redirect:/registroSucesso";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Erro ao registrar aluno: " + e.getMessage());
-            return "redirect:/registroAluno";
-        }
+        alunoService.registraAluno(alunoMapper.dtoToEntity(alunoDTO));
+        return "registroSucesso";
     }
 
     @GetMapping("/validar-aluno/{id}")
     public String exibirValidacao(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
         try {
             Aluno aluno = alunoService.buscarPorId(id);
-            AlunoDTO alunoDTO = new AlunoDTO(aluno);
+            AlunoDTO alunoDTO = alunoMapper.entityToDto(aluno);
             model.addAttribute("alunoDTO", alunoDTO);
 
             String fotoBase64 = aluno.getCadastroAcademico() != null && aluno.getCadastroAcademico().getFoto() != null
@@ -110,7 +115,7 @@ public class AlunoController {
                                RedirectAttributes redirectAttributes,
                                HttpSession session) {
         try {
-            Usuario coordenador = (Usuario) session.getAttribute("usuarioLogado");
+            UsuarioDTO coordenador = (UsuarioDTO) session.getAttribute("usuarioLogado");
 
             if (coordenador == null) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Coordenador não está logado.");
@@ -121,7 +126,7 @@ public class AlunoController {
             StatusValidacao status = alunoDTO.status();
             String descricaoReprovacao = alunoDTO.descricaoReprovacao();
 
-            validacaoService.valida(alunoId, coordenador.getId(), status, descricaoReprovacao, true);
+            validacaoService.valida(alunoId, coordenador.id(), status, descricaoReprovacao, true);
             redirectAttributes.addFlashAttribute("successMessage", "Validação realizada com sucesso!");
             return "redirect:/validar-postagens";
         } catch (IllegalArgumentException e) {
@@ -137,17 +142,14 @@ public class AlunoController {
     public String listarPostagensPendentes(Model model) {
         List<Aluno> alunosPendentes = alunoService.buscarAlunosPendentes();
 
-        List<AlunoDTO> alunosPendentesDTO = alunosPendentes.stream()
-                .map(AlunoDTO::new) // Use the AlunoDTO constructor directly
-                .collect(Collectors.toList());
-
-        model.addAttribute("alunosPendentes", alunosPendentesDTO);
+        model.addAttribute("alunosPendentes", alunoMapper.toDtoList(alunosPendentes));
         return "validar-postagens";
     }
     
     @GetMapping("/feed")
     public String listarAlunosAprovados(Model model){
-    	model.addAttribute("alunos", alunoService.buscarAlunosAprovados());
+        List<Aluno> alunos = alunoService.buscarAlunosAprovados();
+    	model.addAttribute("alunos", alunoMapper.toDtoList(alunos));
     	return "feed";
     }
     

@@ -1,18 +1,16 @@
 package com.fatec.carometro.Services;
 
+import com.fatec.carometro.DTOs.mappers.Mapper;
 import com.fatec.carometro.DTOs.UsuarioDTO;
 import com.fatec.carometro.Entities.Curso;
 import com.fatec.carometro.Entities.Usuario;
-import com.fatec.carometro.Exceptions.GlobalExceptionHandler;
 import com.fatec.carometro.Exceptions.LoginException;
+import com.fatec.carometro.Repositories.CursoRepository;
 import com.fatec.carometro.Repositories.UsuarioRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.fatec.carometro.Utils.Criptografia.criptografarSenha;
 import static com.fatec.carometro.Utils.Criptografia.descriptografaSenha;
@@ -30,8 +28,8 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public Usuario salvar(UsuarioDTO usuarioDTO) {
-        Usuario usuario = usuarioDTO.toEntity();
+    public Usuario salvar(Usuario usuario) {
+
         usuario.setSenha(criptografarSenha(usuario.getSenha()));
         if (usuario.getCurso() != null && usuario.getCurso().getId() != null) {
             Curso curso = cursoService.buscarPorId(usuario.getCurso().getId());

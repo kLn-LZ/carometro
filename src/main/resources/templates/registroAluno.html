@@ -68,7 +68,7 @@
 
     <h2>Consentimento</h2>
     <label for="consentePublicacao">Concordo com a publicação das minhas informações:</label>
-    <input type="checkbox" id="consentePublicacao" th:field="*{consentePublicacao}">
+    <input type="checkbox" id="consentePublicacao" th:field="*{consentePublicacao}" required>
     <span class="field-error" th:if="${#fields.hasErrors('consentePublicacao')}" th:errors="*{consentePublicacao}"></span><br>
 
     <button type="submit">Registrar</button>
@@ -91,14 +91,6 @@
             preview.style.display = 'none';
         }
     }
-
-    document.querySelector("form").addEventListener("submit", function(event) {
-        const checkbox = document.getElementById("consentePublicacao");
-        if (!checkbox.checked) {
-            event.preventDefault();
-            alert("Precisa-se de consentimento para publicação");
-        }
-    });
 </script>
 </body>
 </html>

@@ -1,6 +1,8 @@
 package com.fatec.carometro.Controllers;
 
+import com.fatec.carometro.DTOs.CursoDTO;
 import com.fatec.carometro.DTOs.UsuarioDTO;
+import com.fatec.carometro.DTOs.mappers.Mapper;
 import com.fatec.carometro.Entities.Curso;
 import com.fatec.carometro.Entities.Usuario;
 import com.fatec.carometro.Services.CursoService;
@@ -24,9 +26,16 @@ public class UsuarioController {
     @Autowired
     private CursoService cursoService;
 
+    @Autowired
+    private Mapper<Usuario, UsuarioDTO> usuarioMapper;
+
+    @Autowired
+    private Mapper<Curso, CursoDTO> cursoMapper;
+
     @GetMapping
     public String listarUsuarios(Model model) {
-        model.addAttribute("usuarios", usuarioService.listarTodos());
+        List<Usuario> usuarios = usuarioService.listarTodos();
+        model.addAttribute("usuarios", usuarioMapper.toDtoList(usuarios));
         return "lista";
     }
 
@@ -34,7 +43,7 @@ public class UsuarioController {
     public String novoUsuario(Model model) {
         model.addAttribute("usuarioDTO", new UsuarioDTO(null, null, null, null, null, null));
         List<Curso> cursos = cursoService.buscarCursos();
-        model.addAttribute("cursos", cursos);
+        model.addAttribute("cursos", cursoMapper.toDtoList(cursos));
         return "formulario";
     }
 
@@ -42,20 +51,20 @@ public class UsuarioController {
     public String salvar(@Valid @ModelAttribute("usuarioDTO") UsuarioDTO usuarioDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
             List<Curso> cursos = cursoService.buscarCursos();
-            model.addAttribute("cursos", cursos);
+            model.addAttribute("cursos", cursoMapper.toDtoList(cursos));
             return "formulario";
         }
 
-        usuarioService.salvar(usuarioDTO);
+        usuarioService.salvar(usuarioMapper.dtoToEntity(usuarioDTO));
         return "redirect:/usuarios";
     }
 
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
         Usuario usuario = usuarioService.buscarPorId(id);
-        model.addAttribute("usuarioDTO", new UsuarioDTO(usuario));
+        model.addAttribute("usuarioDTO", usuarioMapper.entityToDto(usuario));
         List<Curso> cursos = cursoService.buscarCursos();
-        model.addAttribute("cursos", cursos);
+        model.addAttribute("cursos", cursoMapper.toDtoList(cursos));
         return "formulario";
     }
 

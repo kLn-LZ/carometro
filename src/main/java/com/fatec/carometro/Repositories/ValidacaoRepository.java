@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ValidacaoRepository extends JpaRepository<Validacao, Long> {
     Optional<Validacao> findByAluno_Id(Long id);
+
 }

@@ -1,20 +1,15 @@
 package com.fatec.carometro.Services;
 
-import aj.org.objectweb.asm.commons.TryCatchBlockSorter;
-import com.fatec.carometro.DTOs.AlunoDTO;
 import com.fatec.carometro.Entities.*;
 import com.fatec.carometro.Exceptions.AlunoNotFoundException;
 import com.fatec.carometro.Repositories.AlunoRepository;
 import com.fatec.carometro.Repositories.CadastroAcademicoRepository;
 import com.fatec.carometro.Repositories.ValidacaoRepository;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AlunoService {
@@ -44,15 +39,10 @@ public class AlunoService {
         return alunoRepository.findByValidacao_Status(StatusValidacao.APROVADO);
     }
 
-    public void registraAluno(AlunoDTO alunoDTO, HttpSession session) throws IOException {
-        if (!alunoDTO.consentePublicacao()) {
-            throw new IllegalArgumentException("É necessário consentimento para publicação.");
-        }
+    public void registraAluno(Aluno aluno) {
 
-        CadastroAcademico cadastroAcademico = cadastroAcademicoRepository.findByAluno_Id(alunoDTO.id()).orElse(null);
-        Validacao validacao = validacaoRepository.findByAluno_Id(alunoDTO.id()).orElse(null);
-
-        Aluno aluno = alunoDTO.toEntity(cadastroAcademico, validacao);
+        cadastroAcademicoRepository.findByAluno_Id(aluno.getId()).ifPresent(c -> aluno.getCadastroAcademico().setId(c.getId()));
+        validacaoRepository.findByAluno_Id(aluno.getId()).ifPresent( v -> aluno.getValidacao().setId(v.getId()));
 
         validacaoRepository.save(aluno.getValidacao());
         cadastroAcademicoRepository.save((aluno.getCadastroAcademico()));
