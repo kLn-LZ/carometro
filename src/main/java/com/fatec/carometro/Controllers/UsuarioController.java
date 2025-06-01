@@ -56,7 +56,7 @@ public class UsuarioController {
         }
 
         usuarioService.salvar(usuarioMapper.dtoToEntity(usuarioDTO));
-        return "redirect:/usuarios";
+        return "redirect:/login";
     }
 
     @GetMapping("/editar/{id}")

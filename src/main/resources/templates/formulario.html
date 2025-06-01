@@ -37,7 +37,6 @@
         <select th:field="*{tipo}" required>
             <option value="">Selecione um tipo</option>
             <option th:value="'ALUNO'">Aluno</option>
-            <option th:value="'ADMIN'">Admin</option>
             <option th:value="'COORDENADOR'">Coordenador</option>
         </select>
         <span class="field-error" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></span><br/>
