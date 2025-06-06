@@ -17,54 +17,55 @@
 <body>
 <h1>Validação de Aluno - Carômetro</h1>
 
-<form th:action="@{/validar-aluno}" th:object="${aluno}" method="post">
+<form th:action="@{/validar-aluno}" th:object="${alunoDTO}" method="post">
     <input type="hidden" th:field="*{id}" />
 
     <h2>Foto</h2>
     <div>
         <img id="fotoPreview"
              th:src="'data:image/jpeg;base64,' + ${fotoBase64}"
+             th:if="${fotoBase64}"
              alt="Foto do aluno">
     </div>
 
     <h2>Dados Pessoais</h2>
     <label>Nome:</label>
-    <input type="text" th:field="*{nome}" disabled><br>
+    <input type="text" th:value="*{nome}" disabled><br>
 
     <label>Curso:</label>
-    <input type="text" th:field="*{curso}" disabled><br>
+    <input type="text" th:value="*{cursoNome}" disabled><br>
 
     <label>Ano:</label>
-    <input type="text" th:field="*{ano}" disabled><br>
+    <input type="text" th:value="*{ano}" disabled><br>
 
     <h2>Links</h2>
     <label>LinkedIn:</label>
-    <input type="url" th:field="*{linkedIn}" disabled><br>
+    <input type="url" th:value="*{linkedIn}" disabled><br>
 
     <label>GitHub:</label>
-    <input type="url" th:field="*{gitHub}" disabled><br>
+    <input type="url" th:value="*{gitHub}" disabled><br>
 
     <label>Lattes:</label>
-    <input type="url" th:field="*{lattes}" disabled><br>
+    <input type="url" th:value="*{lattes}" disabled><br>
 
     <h2>Histórico</h2>
-    <textarea th:field="*{historico}" rows="5" cols="50" disabled></textarea><br>
+    <textarea th:text="*{historico}" rows="5" cols="50" disabled></textarea><br>
 
-    <h2>comentarios</h2>
-    <textarea th:field="*{comentarios}" rows="5" cols="50" disabled></textarea><br>
+    <h2>Comentários</h2>
+    <textarea th:text="*{comentarios}" rows="5" cols="50" disabled></textarea><br>
 
     <h2>Consentimento</h2>
     <label>Concorda com a publicação das informações?</label>
-    <input type="checkbox" th:field="*{consentePublicacao}" disabled><br><br>
+    <input type="checkbox" th:checked="*{consentePublicacao}" disabled><br><br>
 
     <h2>Validação</h2>
-    <label for="validado">Estado do Perfil:</label>
-    <select th:field="*{validado}" required id="validadoSelect">
-        <option value="APROVADO" th:selected="${aluno.validado == 'APROVADO'}">Aprovado</option>
-        <option value="REPROVADO" th:selected="${aluno.validado == 'REPROVADO'}">Reprovado</option>
+    <label for="status">Estado do Perfil:</label>
+    <select th:field="*{status}" required id="statusSelect">
+        <option value="APROVADO" th:text="'Aprovado'">Aprovado</option>
+        <option value="REPROVADO" th:text="'Reprovado'">Reprovado</option>
     </select><br><br>
 
-    <div id="descricaoReprovacaoDiv" class="hidden" th:classappend="${aluno.validado == 'REPROVADO'} ? '' : 'hidden'">
+    <div id="descricaoReprovacaoDiv" class="hidden" th:classappend="${alunoDTO.status == 'REPROVADO'} ? '' : 'hidden'">
         <label for="descricaoReprovacao">Descrição da Reprovação:</label>
         <textarea th:field="*{descricaoReprovacao}" rows="4" cols="50" placeholder="Descreva o motivo da reprovação"></textarea><br><br>
     </div>
@@ -75,13 +76,22 @@
 <a th:href="@{/validar-postagens}">Voltar à lista</a>
 
 <script>
-    document.getElementById('validadoSelect').addEventListener('change', function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        const select = document.getElementById('statusSelect');
         const descricaoDiv = document.getElementById('descricaoReprovacaoDiv');
-        if (this.value === 'REPROVADO') {
-            descricaoDiv.classList.remove('hidden');
-        } else {
-            descricaoDiv.classList.add('hidden');
+
+        function toggleDescricao() {
+            if (select.value === 'REPROVADO') {
+                descricaoDiv.classList.remove('hidden');
+            } else {
+                descricaoDiv.classList.add('hidden');
+            }
         }
+
+        select.addEventListener('change', toggleDescricao);
+
+        // Executa na carga inicial
+        toggleDescricao();
     });
 </script>
 </body>

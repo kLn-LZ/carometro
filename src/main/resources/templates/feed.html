@@ -40,7 +40,59 @@
 				</div>
 			</div>
 		</div>
-	</div>
+        
+	    <div th:each="aluno : ${alunos}">
+	        <div class="modal fade modal-xl" th:id="'modal' + ${aluno.id}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+	            <div class="modal-dialog">
+	                <div class="modal-content">
+	                    <div class="modal-header">
+	                        <h5 class="modal-title fw-bold" id="modalLabel">Perfil</h5>
+	                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	                    </div>
+	                    <div class="modal-body">
+	                    	<div class="d-flex mb-2 flex-wrap">	                    		
+		                    	<div class="flex-shrink-0">	                    	
+			                    	<img class="rounded-2" th:src="@{/aluno/{id}/foto(id=${aluno.id})}">
+		                    	</div>
+		                    	<div class="flex-grow-1 ms-3">	                    		
+			                    	<p class="ms-auto p-2"><strong>Nome:</strong> <span th:text="${aluno.nome}">Nome do Aluno</span></p>
+			                        <p class="ms-auto p-2"><strong>Curso:</strong> <span th:text="${aluno.cursoNome}">Curso do Aluno</span></p>
+			                        <p class="ms-auto p-2"><strong>Ano:</strong> <span th:text="${aluno.ano}">Ano do Aluno</span></p>
+		                    		<p class="ms-auto p-2"><strong>Linkedin:</strong> <a th:href="${aluno.linkedIn}" target="_blank" th:text="${aluno.linkedIn}">Linkedin</a></p>
+		                    		<p class="ms-auto p-2"><strong>Github:</strong> <a th:href="${aluno.gitHub}" target="_blank" th:text="${aluno.gitHub}">Github</a></p>
+		                    		<p class="ms-auto p-2"><strong>Lattes:</strong> <a th:href="${aluno.lattes}" target="_blank" th:text="${aluno.lattes}">Lattes</a></p>
+		                    	</div>
+		                    	
+		                    	<div class="w-100"></div>
+		                    	
+		                    	<div class="d-flex justify-content-center flex-column w-100 mt-4">		                    		
+			                        <div class="p-2">
+			                        	<div class="card">
+										  <div class="card-header">Comentarios</div>
+										  <div class="card-body">
+										    <p th:text=${aluno.comentarios}></p>
+										  </div>
+										</div>
+			                        </div>
+			                        
+			                        <div class="p-2">
+			                        	<div class="card">
+										  <div class="card-header">Histórico</div>
+										  <div class="card-body">
+										    <p th:text="${aluno.historico}"></p>
+										  </div>
+										</div>
+			                        </div>
+		                    	</div>
+	                    	</div>
+	                    </div>
+	                    <div class="modal-footer">
+	                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
 
 	<div th:each="aluno : ${alunos}">
 		<div class="modal fade modal-xl" th:id="'modal' + ${aluno.id}"

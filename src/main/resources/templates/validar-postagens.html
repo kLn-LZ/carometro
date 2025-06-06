@@ -19,7 +19,7 @@
     <tbody>
     <tr th:each="aluno : ${alunosPendentes}">
         <td th:text="${aluno.nome}">Nome</td>
-        <td th:text="${aluno.curso}">Curso</td>
+        <td th:text="${aluno.cursoNome}">Curso</td>
         <td th:text="${aluno.ano}">Ano</td>
         <td>
             <a th:href="@{/validar-aluno/{id}(id=${aluno.id})}">Validar</a>
