@@ -29,12 +29,20 @@ public class LoginController {
 
     @PostMapping("/login")
     public String processarLogin(@RequestParam String email, @RequestParam String senha, HttpSession session, Model model) {
-        Usuario usuario = usuarioService.autenticar(email, senha);
+    	Usuario usuario = usuarioService.autenticar(email, senha);
+        
+        if (usuario == null) {
+            model.addAttribute("erro", "Email ou senha inválidos");
+            return "login"; // Redireciona de volta para a página de login
+        }
+        
         session.setAttribute("usuarioLogado", usuario);
-        if (usuario.getTipo() == TipoUsuario.ADMIN)
+        
+        if (usuario.getTipo() == TipoUsuario.ADMIN) {
             return "menu-adm";
-        else
+        } else {
             return "menu-aluno";
+        }
     }
 
     @GetMapping("/visitante")

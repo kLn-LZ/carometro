@@ -1,7 +1,11 @@
 package com.fatec.carometro.Controllers;
 
+import com.fatec.carometro.Entities.TipoUsuario;
 import com.fatec.carometro.Entities.Usuario;
 import com.fatec.carometro.Services.UsuarioService;
+
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,5 +47,14 @@ public class UsuarioController {
     public String deletar(@PathVariable Long id) {
         usuarioService.excluir(id);
         return "redirect:/usuarios";
+    }
+    
+    @GetMapping("/menu-aluno")
+    public String menuAluno(@SessionAttribute Usuario usuario) {
+    	
+        if (usuario.getTipo() == TipoUsuario.ADMIN)
+            return "menu-adm";
+        else
+            return "menu-aluno";
     }
 }

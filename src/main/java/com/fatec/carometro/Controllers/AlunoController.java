@@ -1,6 +1,7 @@
 package com.fatec.carometro.Controllers;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +15,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.fatec.carometro.DTOs.AlunoDTO;
 import com.fatec.carometro.Entities.Aluno;
 import com.fatec.carometro.Entities.Validacao;
 import com.fatec.carometro.Services.AlunoService;
+import com.fatec.carometro.Entities.TipoUsuario;
 
-import java.io.IOException;
-import java.util.Base64;
-import java.util.List;
 import jakarta.validation.Valid;
 
 @Controller
