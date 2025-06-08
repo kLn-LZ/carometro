@@ -1,6 +1,7 @@
 package com.fatec.carometro.Controllers;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 import com.fatec.carometro.DTOs.CursoDTO;

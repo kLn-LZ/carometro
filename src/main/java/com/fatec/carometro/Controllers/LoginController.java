@@ -6,6 +6,8 @@ import com.fatec.carometro.Entities.Coordenador;
 import com.fatec.carometro.Entities.Usuario;
 import com.fatec.carometro.Exceptions.LoginException;
 import com.fatec.carometro.Services.UsuarioService;
+import com.fatec.carometro.Entities.StatusValidacao;
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@SuppressWarnings("unused")
 @Controller
 public class LoginController {
 
@@ -35,6 +38,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public String processarLogin(@RequestParam String email, @RequestParam String senha, HttpSession session, Model model) {
+
         UsuarioDTO dto = usuarioMapper.entityToDto(usuarioService.autenticar(email, senha));
         session.setAttribute("usuarioLogado", dto);
         if (dto.tipo().equals("COORDENADOR"))

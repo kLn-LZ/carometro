@@ -4,10 +4,13 @@ import com.fatec.carometro.DTOs.CursoDTO;
 import com.fatec.carometro.DTOs.UsuarioDTO;
 import com.fatec.carometro.DTOs.mappers.Mapper;
 import com.fatec.carometro.Entities.Curso;
+
 import com.fatec.carometro.Entities.Usuario;
 import com.fatec.carometro.Services.CursoService;
 import com.fatec.carometro.Services.UsuarioService;
+
 import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -73,4 +76,5 @@ public class UsuarioController {
         usuarioService.excluir(id);
         return "redirect:/usuarios";
     }
+    
 }

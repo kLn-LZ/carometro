@@ -15,6 +15,7 @@
     </style>
 </head>
 <body>
+	<nav th:insert="navbar"></nav>
 <h1>Validação de Aluno - Carômetro</h1>
 
 <form th:action="@{/validar-aluno}" th:object="${alunoDTO}" method="post">
