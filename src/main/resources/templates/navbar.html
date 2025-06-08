@@ -28,23 +28,26 @@
 				
 				<!-- Aluno -->					
 				<ul class="navbar-nav"
-					th:if="${usuario != null && usuario.tipo == T(com.fatec.carometro.Entities.TipoUsuario).ALUNO}">
+					th:if="${usuario != null  && usuario.tipo == 'ALUNO'}">
 					
 					<li class="nav-item">
 						<a class="nav-link" th:href="@{/registroAluno}">Registrar perfil</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" th:href="@{/menu-aluno}">teste</a>
+						<a class="nav-link" th:href="@{/menu-aluno}">Menu do Aluno</a>
 					</li>
 					
 				</ul>
 				
-				<!-- Admin -->
+				<!-- Coordenador -->
 				<ul class="navbar-nav"
-					th:if="${usuario != null && usuario.tipo == T(com.fatec.carometro.Entities.TipoUsuario).ADMIN}">
+					th:if="${usuario != null && usuario.tipo == 'COORDENADOR'}">
 					
 					<li class="nav-item">
-						<a class="nav-link" th:href="@{/registroAluno}">Registrar perfil</a>
+						<a class="nav-link" th:href="@{/validar-postagens}">Validar Postagens</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/menu-adm}">Menu Admin</a>
 					</li>
 					
 				</ul>

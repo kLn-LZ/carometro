@@ -5,6 +5,7 @@
     <title>Formulário de Usuário</title>
 </head>
 <body>
+	<nav th:insert="navbar"></nav>
 <div class="form-container">
     <h1 th:text="${usuarioDTO.id == null} ? 'Novo Usuário' : 'Editar Usuário'"></h1>
 
