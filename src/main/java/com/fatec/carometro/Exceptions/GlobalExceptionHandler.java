@@ -1,17 +1,32 @@
 package com.fatec.carometro.Exceptions;
 
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.ui.Model;
+
+import com.fatec.carometro.DTOs.CursoDTO;
+import com.fatec.carometro.DTOs.mappers.Mapper;
+import com.fatec.carometro.Entities.Curso;
+import com.fatec.carometro.Services.CursoService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     private final Logger LOGGER = LoggerFactory.getLogger("TESTE");
+   
+    @Autowired
+    private CursoService cursoService;
+    
+    @Autowired
+    private Mapper<Curso, CursoDTO> cursoMapper;	
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -28,6 +43,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CadastroAlunoException.class)
     public String handleCadastroAlunoExceptions(CadastroAlunoException ex, Model model) {
+		List<Curso> cursos = cursoService.buscarCursos();
+        model.addAttribute("cursos", cursoMapper.toDtoList(cursos));
         model.addAttribute("error", ex.getMessage());
         model.addAttribute("alunoDTO", ex.getAlunoDTO());
         return "registroAluno";
@@ -38,4 +55,5 @@ public class GlobalExceptionHandler {
         model.addAttribute("error", ex.getMessage());
         return "erro";
     }
+    		
 }
