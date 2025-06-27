@@ -40,7 +40,7 @@ public class TokenService {
     }
 
     public CadastroToken validaEUsaToken(String token, Usuario usuario) {
-        CadastroToken cadastroToken = cadastroTokenRepository.findByToken(token).get();
+        CadastroToken cadastroToken =  cadastroTokenRepository.findByToken(token).isEmpty()? null: cadastroTokenRepository.findByToken(token).get();
         if (cadastroToken.isUsado()) {
             return null;
         }
