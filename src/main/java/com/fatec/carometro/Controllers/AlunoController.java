@@ -12,6 +12,7 @@ import com.fatec.carometro.Entities.Usuario;
 import com.fatec.carometro.Exceptions.AlunoNotFoundException;
 import com.fatec.carometro.Exceptions.CadastroAlunoException;
 import com.fatec.carometro.Services.CursoService;
+import com.fatec.carometro.Services.TokenService;
 import com.fatec.carometro.Services.ValidacaoService;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.LoggerFactory;
@@ -43,11 +44,15 @@ public class AlunoController {
 
     @Autowired
     private AlunoService alunoService;
+
     @Autowired
     private ValidacaoService validacaoService;
 
     @Autowired
     private CursoService cursoService;
+
+    @Autowired
+    private TokenService tokenService;
 
     @Autowired
     private Mapper<Aluno, AlunoDTO> alunoMapper;
@@ -68,6 +73,7 @@ public class AlunoController {
         List<Curso> cursos = cursoService.buscarCursos();
         model.addAttribute("cursos", cursoMapper.toDtoList(cursos));
         model.addAttribute("alunoDTO", alunoDTO);
+        model.addAttribute("tokenValidated", session.getAttribute("tokenValidated") != null && (boolean) session.getAttribute("tokenValidated"));
         return "registroAluno";
     }
 
@@ -85,8 +91,23 @@ public class AlunoController {
             throw new CadastroAlunoException(alunoDTO, "É necessário consentimento para publicação.");
         }
 
-        alunoService.registraAluno(alunoMapper.dtoToEntity(alunoDTO));
-        return "registroSucesso";
+        Aluno aluno = alunoMapper.dtoToEntity(alunoDTO);
+        alunoService.registraAluno(aluno);
+        session.removeAttribute("tokenValidated");
+        redirectAttributes.addFlashAttribute("success", true);
+        return "redirect:/registroAluno?success";
+    }
+
+    @PostMapping("/registroAluno/validarToken")
+    public String validarToken(@RequestParam Long alunoId, @RequestParam String editToken,
+                               RedirectAttributes redirectAttributes, HttpSession session) {
+        if (tokenService.validaEUsaToken(editToken, alunoService.buscarPorId(alunoId)) != null) {
+            session.setAttribute("tokenValidated", true);
+            redirectAttributes.addFlashAttribute("successMessage", "Token validado com sucesso! Agora você pode editar seu perfil.");
+        } else {
+             redirectAttributes.addFlashAttribute("tokenError", "Token inválido, já usado ou expirado.");
+        }
+        return "redirect:/registroAluno?id=" + alunoId;
     }
 
     @GetMapping("/validar-aluno/{id}")

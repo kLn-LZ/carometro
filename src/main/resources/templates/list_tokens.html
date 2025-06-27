@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta chartset="UTF-8">
+    <title>Listar Tokens</title>
 </head>
 <body>
-
+<nav th:insert="navbar"></nav>
+<h2>Lista de Tokens</h2>
+<table>
+    <tr>
+        <th>Token</th>
+        <th>Criado Em</th>
+        <th>Usado</th>
+        <th>Usado Por</th>
+        <th>Expira Em</th>
+    </tr>
+    <tr th:each="token : ${tokens}">
+        <td th:text="${token.token}"></td>
+        <td th:text="${token.criadoEm}"></td>
+        <td th:text="${token.usado ? 'Sim' : 'Não'}"></td>
+        <td th:text="${token.usadoPor?.nome} ?: 'N/A'"></td>
+        <td th:text="${token.expiraEm} ?: 'Não Expira'"></td>
+    </tr>
+</table>
+<a th:href="@{/menu_admin}">Voltar</a>
 </body>
 </html>

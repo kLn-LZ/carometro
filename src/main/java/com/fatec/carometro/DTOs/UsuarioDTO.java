@@ -14,6 +14,7 @@ public record UsuarioDTO(
         String email,
         String senha,
         Long cursoId,
-        String tipo
+        String tipo,
+        String token
 ) {
 }

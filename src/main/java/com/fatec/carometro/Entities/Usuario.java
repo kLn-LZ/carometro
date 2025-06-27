@@ -28,4 +28,6 @@ public class Usuario {
     @ManyToOne
     @JoinColumn(name = "curso_id")
     private Curso curso;
+
+    private String token;
 }

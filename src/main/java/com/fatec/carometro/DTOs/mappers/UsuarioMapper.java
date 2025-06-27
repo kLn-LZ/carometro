@@ -21,7 +21,8 @@ public class UsuarioMapper implements Mapper<Usuario, UsuarioDTO> {
                 entity.getCurso() != null ? entity.getCurso().getId() : null,
                 entity.getClass().getAnnotation(DiscriminatorValue.class) != null
                         ? entity.getClass().getAnnotation(DiscriminatorValue.class).value()
-                        : null
+                        : null,
+                entity.getToken()
         );
     }
 
@@ -37,6 +38,7 @@ public class UsuarioMapper implements Mapper<Usuario, UsuarioDTO> {
         usuario.setNome(dto.nome());
         usuario.setEmail(dto.email());
         usuario.setSenha(dto.senha());
+        usuario.setToken(dto.token());
 
         if (dto.cursoId() != null) {
             Curso curso = new Curso();

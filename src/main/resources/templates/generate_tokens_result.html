@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Tokens Gerados</title>
 </head>
 <body>
-$END$
+<nav th:insert="navbar"></nav>
+<h2>Tokens Gerados</h2>
+<ul>
+  <li th:each="token : ${tokens}" th:text="${token}"></li>
+</ul>
+<p>Guarde esses tokens para distribuir aos alunos.</p>
+<a th:href="@{/tokens/generate}">Gerar Mais Tokens</a><br>
+<a th:href="@{/menu_admin}">Voltar</a>
 </body>
 </html>

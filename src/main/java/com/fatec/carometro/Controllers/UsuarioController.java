@@ -3,10 +3,12 @@ package com.fatec.carometro.Controllers;
 import com.fatec.carometro.DTOs.CursoDTO;
 import com.fatec.carometro.DTOs.UsuarioDTO;
 import com.fatec.carometro.DTOs.mappers.Mapper;
+import com.fatec.carometro.Entities.CadastroToken;
 import com.fatec.carometro.Entities.Curso;
 
 import com.fatec.carometro.Entities.Usuario;
 import com.fatec.carometro.Services.CursoService;
+import com.fatec.carometro.Services.TokenService;
 import com.fatec.carometro.Services.UsuarioService;
 
 import jakarta.validation.Valid;
@@ -30,6 +32,9 @@ public class UsuarioController {
     private CursoService cursoService;
 
     @Autowired
+    private TokenService tokenService;
+
+    @Autowired
     private Mapper<Usuario, UsuarioDTO> usuarioMapper;
 
     @Autowired
@@ -44,7 +49,7 @@ public class UsuarioController {
 
     @GetMapping("/novo")
     public String novoUsuario(Model model) {
-        model.addAttribute("usuarioDTO", new UsuarioDTO(null, null, null, null, null, null));
+        model.addAttribute("usuarioDTO", new UsuarioDTO(null, null, null, null, null, null, null));
         List<Curso> cursos = cursoService.buscarCursos();
         model.addAttribute("cursos", cursoMapper.toDtoList(cursos));
         return "formulario";
@@ -57,8 +62,18 @@ public class UsuarioController {
             model.addAttribute("cursos", cursoMapper.toDtoList(cursos));
             return "formulario";
         }
+        Usuario usuario = usuarioMapper.dtoToEntity(usuarioDTO);
 
-        usuarioService.salvar(usuarioMapper.dtoToEntity(usuarioDTO));
+        CadastroToken cadastroToken = tokenService.validaEUsaToken(usuarioDTO.token(), usuario);
+        if (cadastroToken == null) {
+            List<Curso> cursos = cursoService.buscarCursos();
+            model.addAttribute("cursos", cursoMapper.toDtoList(cursos));
+            model.addAttribute("error", "Token inválido, já usado ou expirado.");
+            return "formulario";
+        }
+
+        usuarioService.salvar(usuario);
+        tokenService.registraUsoToken(cadastroToken);
         return "redirect:/login";
     }
 

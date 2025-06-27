@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Gerar Tokens</title>
 </head>
 <body>
-$END$
+<nav th:insert="navbar"></nav>
+<h2>Gerar Tokens</h2>
+<form th:action="@{/tokens/generate}" method="post">
+  <label for="quantidade">Quantidade de Tokens:</label>
+  <input type="number" id="quantidade" name="quantidade" min="1" required><br>
+  <label for="diasParaExpirar">Dias até Expirar (opcional):</label>
+  <input type="number" id="diasParaExpirar" name="diasParaExpirar" min="1"><br>
+  <button type="submit">Gerar</button>
+</form>
+<a th:href="@{/menu_admin}">Voltar</a>
 </body>
 </html>
