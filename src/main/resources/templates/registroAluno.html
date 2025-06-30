@@ -10,25 +10,27 @@
 	<nav th:insert="~{navbar}"></nav>
 </header>
 
-<main class="d-flex align-items-center justify-content-center min-vh-100 mt-5 mb-5">
+<main class="d-flex align-items-center justify-content-center min-vh-100 mt-5 mb-5"
+	  th:with="status=${T(com.fatec.carometro.Entities.StatusValidacao)},
+	  			maxLength=${255}">
+	  
 	<div class="container" style="max-width: 800px;">
 		<div class="card rounded-3 shadow-sm p-4">
 			<h1 class="display-8 fw-bold text-dark mb-3 text-center"
 				th:text="${alunoDTO.id == null} ? 'Registrar-se como Aluno' : 'Editar seu Registro'"></h1>
-			<p th:if="${error}" class="error text-warning-emphasis" th:text="${error}"></p>
-
-			<div th:if="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).REPROVADO and alunoDTO.descricaoReprovacao != null}"
+			<p th:if="${error}" class="error text-warning-emphasis" th:text="${error}"></p>			
+			<div th:if="${alunoDTO.status.equals(status.REPROVADO) and alunoDTO.descricaoReprovacao != null}"
 				 style="color: red; margin-bottom: 1em;">
 				<p><strong>Status do Perfil:</strong> Reprovado</p>
 				<p><strong>Justificativa:</strong> <span th:text="${alunoDTO.descricaoReprovacao}"></span></p>
 			</div>
 
-			<div th:if="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).PENDENTE}"
+			<div th:if="${alunoDTO.status.equals(status.PENDENTE)}"
 				 style="color: orange; margin-bottom: 1em;">
 				<p><strong>Status do Perfil:</strong> Pendente de aprovação</p>
 			</div>
 
-			<div th:if="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).APROVADO and !tokenValidated}"
+			<div th:if="${alunoDTO.status.equals(status.APROVADO) and !tokenValidated}"
 				 class="mb-3">
 				<p class="text-success text-center">Seu perfil está aprovado!</p>
 				<button type="button" class="btn btn-primary w-100" onclick="showTokenInput()">Editar Perfil</button>
@@ -44,13 +46,13 @@
 			</div>
 
 			<form th:action="@{/registroAluno}" th:object="${alunoDTO}" method="post" enctype="multipart/form-data"
-				  th:class="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).PENDENTE or (alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).APROVADO and !tokenValidated)} ? 'disabled-form' : ''">
+				  th:class="${alunoDTO.status.equals(status.PENDENTE) or (alunoDTO.status.equals(status.APROVADO) and !tokenValidated)} ? 'disabled-form' : ''">
 				<input type="hidden" th:field="*{id}" />
 
 				<h2 class="mt-4">Foto</h2>
 				<label for="foto" class="form-label fw-semibold text-secondary">Foto (Sozinho ou em Família):</label>
 				<input type="file" id="foto" name="foto" accept="image/*" th:required="${alunoDTO.id == null}" onchange="previewImage(event)" class="form-control"
-					   th:disabled="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).PENDENTE or (alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).APROVADO and !tokenValidated)}" />
+					   th:disabled="${alunoDTO.status.equals(status.PENDENTE) or (alunoDTO.status.equals(status.APROVADO) and !tokenValidated)}" />
 				<span class="field-error" th:if="${#fields.hasErrors('foto')}" th:errors="*{foto}"></span>
 				<img id="fotoPreview" th:src="${alunoDTO.fotoBase64 != null} ? 'data:image/jpeg;base64,' + ${alunoDTO.fotoBase64} : ''"
 					 alt="Pré-visualização da Foto" th:style="${alunoDTO.fotoBase64 != null} ? 'display: block' : 'display: none'"
@@ -59,12 +61,12 @@
 				<h2 class="mt-4">Dados Pessoais</h2>
 				<label for="nome" class="form-label fw-semibold text-secondary">Nome</label>
 				<input type="text" id="nome" th:field="*{nome}" required class="form-control"
-					   th:disabled="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).PENDENTE or (alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).APROVADO and !tokenValidated)}" />
+					   th:disabled="${alunoDTO.status.equals(status.PENDENTE) or (alunoDTO.status.equals(status.APROVADO) and !tokenValidated)}" />
 				<span class="field-error" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span>
 
 				<label for="cursoId" class="form-label fw-semibold text-secondary">Curso</label>
 				<select id="cursoId" th:field="*{cursoId}" required class="form-select"
-						th:disabled="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).PENDENTE or (alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).APROVADO and !tokenValidated)}">
+						th:disabled="${alunoDTO.status.equals(status.PENDENTE) or (alunoDTO.status.equals(status.APROVADO) and !tokenValidated)}">
 					<option value="">Selecione um curso</option>
 					<option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nome}" th:selected="${curso.id == alunoDTO.cursoId}"></option>
 				</select>
@@ -72,45 +74,45 @@
 
 				<label for="ano" class="form-label fw-semibold text-secondary">Ano:</label>
 				<input type="number" id="ano" th:field="*{ano}" required class="form-control"
-					   th:disabled="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).PENDENTE or (alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).APROVADO and !tokenValidated)}" />
+					   th:disabled="${alunoDTO.status.equals(status.PENDENTE) or (alunoDTO.status.equals(status.APROVADO) and !tokenValidated)}" />
 				<span class="field-error" th:if="${#fields.hasErrors('ano')}" th:errors="*{ano}"></span>
 
 				<h2 class="mt-4">Links</h2>
 				<label for="linkedIn" class="form-label fw-semibold text-secondary">LinkedIn:</label>
-				<input type="url" id="linkedIn" th:field="*{linkedIn}" class="form-control"
-					   th:disabled="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).PENDENTE or (alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).APROVADO and !tokenValidated)}" />
+				<input type="url" id="linkedIn" th:field="*{linkedIn}" class="form-control" th:attr="maxlength=${maxLength}"
+					   th:disabled="${alunoDTO.status.equals(status.PENDENTE) or (alunoDTO.status.equals(status.APROVADO) and !tokenValidated)}" />
 				<span class="field-error" th:if="${#fields.hasErrors('linkedIn')}" th:errors="*{linkedIn}"></span>
 
 				<label for="gitHub" class="form-label fw-semibold text-secondary">GitHub:</label>
-				<input type="url" id="gitHub" th:field="*{gitHub}" class="form-control"
-					   th:disabled="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).PENDENTE or (alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).APROVADO and !tokenValidated)}" />
+				<input type="url" id="gitHub" th:field="*{gitHub}" class="form-control" th:attr="maxlength=${maxLength}"
+					   th:disabled="${alunoDTO.status.equals(status.PENDENTE) or (alunoDTO.status.equals(status.APROVADO) and !tokenValidated)}" />
 				<span class="field-error" th:if="${#fields.hasErrors('gitHub')}" th:errors="*{gitHub}"></span>
 
 				<label for="lattes" class="form-label fw-semibold text-secondary">Lattes:</label>
-				<input type="url" id="lattes" th:field="*{lattes}" class="form-control"
-					   th:disabled="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).PENDENTE or (alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).APROVADO and !tokenValidated)}" />
+				<input type="url" id="lattes" th:field="*{lattes}" class="form-control" th:attr="maxlength=${maxLength}"
+					   th:disabled="${alunoDTO.status.equals(status.PENDENTE) or (alunoDTO.status.equals(status.APROVADO) and !tokenValidated)}" />
 				<span class="field-error" th:if="${#fields.hasErrors('lattes')}" th:errors="*{lattes}"></span>
 
 				<h2 class="mt-4">Histórico</h2>
 				<label for="historico" class="form-label fw-semibold text-secondary">Histórico (Onde estudou, o que fez lá, e quanto tempo estudou):</label>
-				<textarea id="historico" th:field="*{historico}" required class="form-control"
-						  th:disabled="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).PENDENTE or (alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).APROVADO and !tokenValidated)}"></textarea>
+				<textarea id="historico" th:field="*{historico}" required class="form-control" th:attr="maxlength=${maxLength}"
+						  th:disabled="${alunoDTO.status.equals(status.PENDENTE) or (alunoDTO.status.equals(status.APROVADO) and !tokenValidated)}"></textarea>
 				<span class="field-error" th:if="${#fields.hasErrors('historico')}" th:errors="*{historico}"></span>
 
 				<h2 class="mt-4">Comentários</h2>
 				<label for="comentarios" class="form-label fw-semibold text-secondary">Comentários (Apenas na FATEC):</label>
-				<textarea id="comentarios" th:field="*{comentarios}" required class="form-control"
-						  th:disabled="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).PENDENTE or (alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).APROVADO and !tokenValidated)}"></textarea>
+				<textarea id="comentarios" th:field="*{comentarios}" required class="form-control" th:attr="maxlength=${maxLength}"
+						  th:disabled="${alunoDTO.status.equals(status.PENDENTE) or (alunoDTO.status.equals(status.APROVADO) and !tokenValidated)}"></textarea>
 				<span class="field-error" th:if="${#fields.hasErrors('comentarios')}" th:errors="*{comentarios}"></span>
 
 				<h2 class="mt-4">Consentimento</h2>
 				<label for="consentePublicacao" class="form-label fw-semibold text-secondary">Concordo com a publicação das minhas informações:</label>
 				<input type="checkbox" id="consentePublicacao" th:field="*{consentePublicacao}" required
-					   th:disabled="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).PENDENTE or (alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).APROVADO and !tokenValidated)}" />
+					   th:disabled="${alunoDTO.status.equals(status.PENDENTE) or (alunoDTO.status.equals(status.APROVADO) and !tokenValidated)}" />
 				<span class="field-error" th:if="${#fields.hasErrors('consentePublicacao')}" th:errors="*{consentePublicacao}"></span>
 
 				<button type="submit" class="btn btn-dark w-100 fw-bold py-2 mt-4"
-						th:disabled="${alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).PENDENTE or (alunoDTO.status == T(com.fatec.carometro.Entities.StatusValidacao).APROVADO and !tokenValidated)}">Registrar</button>
+						th:disabled="${alunoDTO.status.equals(status.PENDENTE) or (alunoDTO.status.equals(status.APROVADO) and !tokenValidated)}">Registrar</button>
 			</form>
 
 			<p th:if="${param.success}" class="text-success text-center mt-4">
