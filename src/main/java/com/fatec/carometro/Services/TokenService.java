@@ -41,7 +41,7 @@ public class TokenService {
 
     public CadastroToken validaEUsaToken(String token, Usuario usuario) {
         CadastroToken cadastroToken =  cadastroTokenRepository.findByToken(token).isEmpty()? null: cadastroTokenRepository.findByToken(token).get();
-        if (cadastroToken.isUsado()) {
+        if (cadastroToken == null || cadastroToken.isUsado()) {
             return null;
         }
         if (cadastroToken.getExpiraEm() != null && LocalDateTime.now().isAfter(cadastroToken.getExpiraEm())) {
